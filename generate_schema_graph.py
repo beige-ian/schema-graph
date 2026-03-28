@@ -54,7 +54,7 @@ except ImportError:
 
 # --- 상수 정의 ---
 PROJECT_ID = "covering-app-ccd23"
-D3_CDN_URL = "https://d3js.org/d3.v7.min.js"
+D3_CDN_URL = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
 TARGET_DATASETS = [
     'secure_dataset', 'product', 'spot', 'mixpanel', 
     'airbridge_dataset', 'cx_data', 'bag_delivery', 'ads_data'
@@ -220,13 +220,20 @@ def generate_html(graph_data: dict) -> str:
     
     try:
         print(f"D3.js 라이브러리 다운로드 중... ({D3_CDN_URL})")
-        with urllib.request.urlopen(D3_CDN_URL) as response:
+        req = urllib.request.Request(D3_CDN_URL, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as response:
             d3_script_content = response.read().decode('utf-8')
         print("D3.js 라이브러리 다운로드 완료.")
     except Exception as e:
         print(f"오류: D3.js 라이브러리 다운로드 실패. ({e})", file=sys.stderr)
-        print("HTML 생성은 계속 진행하지만, 인터넷 연결 없이는 그래프가 보이지 않을 수 있습니다.", file=sys.stderr)
-        d3_script_content = f'// D3.js load failed. Please connect to the internet.\n// Fallback to CDN\nconst script = document.createElement("script");\nscript.src = "{D3_CDN_URL}";\ndocument.head.appendChild(script);'
+        print("CDN 폴백으로 진행합니다.", file=sys.stderr)
+        # 폴백: DOMContentLoaded 이후 CDN에서 로드하여 초기화 순서 보장
+        d3_script_content = f'''document.addEventListener("DOMContentLoaded", function() {{
+  var s = document.createElement("script");
+  s.src = "{D3_CDN_URL}";
+  s.onload = function() {{ if (typeof initGraph === "function") initGraph(); }};
+  document.head.appendChild(s);
+}});'''
 
 
     json_data = json.dumps(graph_data, ensure_ascii=False, indent=2)
