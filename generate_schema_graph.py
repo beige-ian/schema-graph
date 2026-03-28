@@ -629,10 +629,16 @@ def generate_html(graph_data: dict) -> str:
         const nodes = [...graphData.tables, ...graphData.external_nodes, ...graphData.dataset_nodes];
         const links = graphData.edges;
 
+        if (nodes.length === 0) {
+            document.querySelector('main').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#aaa;font-size:1.2rem;"><p>표시할 데이터가 없습니다. schema_config.py 설정을 확인해 주세요.</p></div>';
+            throw new Error('No graph data');
+        }
+
         const nodeMap = new Map(nodes.map(d => [d.id, d]));
-        links.forEach(link => {
+        const validLinks = links.filter(link => {
             link.source = nodeMap.get(link.source);
             link.target = nodeMap.get(link.target);
+            return link.source && link.target;
         });
 
         const tierColors = {
@@ -669,7 +675,7 @@ def generate_html(graph_data: dict) -> str:
             .attr("fill", "rgba(255,255,255,0.5)");
 
         const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(links).id(d => d.id).distance(200))
+            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(200))
             .force("charge", d3.forceManyBody().strength(-600))
             .force("center", d3.forceCenter(0, 0))
             .force("cluster", forceCluster()) // 커스텀 클러스터 force
@@ -679,7 +685,7 @@ def generate_html(graph_data: dict) -> str:
         const link = mainGroup.append("g")
             .attr("class", "links")
             .selectAll("line")
-            .data(links)
+            .data(validLinks)
             .join("line")
             .attr("class", d => `link ${d.type}`)
             .attr("marker-end", "url(#end)");
@@ -857,7 +863,7 @@ def generate_html(graph_data: dict) -> str:
             d3.select(this).classed("dimmed", false).classed("highlighted", true);
 
             const connectedNodes = new Set([d.id]);
-            links.forEach(l => {
+            validLinks.forEach(l => {
                 if (l.source.id === d.id) connectedNodes.add(l.target.id);
                 if (l.target.id === d.id) connectedNodes.add(l.source.id);
             });
@@ -903,7 +909,7 @@ def generate_html(graph_data: dict) -> str:
             if (d.type === 'table') {
                 const dsMeta = d.dataset_meta;
                 const badge = `<span class="badge" style="background-color: ${dsMeta.color};">${dsMeta.name_ko}</span>`;
-                const connectedLinks = links.filter(l => l.source.id === d.id || l.target.id === d.id);
+                const connectedLinks = validLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
 
                 content = `
                     <div class="panel-header">
@@ -940,7 +946,7 @@ def generate_html(graph_data: dict) -> str:
                 `;
             } else if (d.type === 'external') {
                 const connectedDatasets = new Set();
-                 links.filter(l => l.source.id === d.id || l.target.id === d.id)
+                 validLinks.filter(l => l.source.id === d.id || l.target.id === d.id)
                       .forEach(l => {
                           const tableNode = l.source.id === d.id ? l.target : l.source;
                           if (tableNode.dataset_id) connectedDatasets.add(tableNode.dataset_id);
@@ -963,7 +969,7 @@ def generate_html(graph_data: dict) -> str:
                     <div class="panel-section">
                         <h3>연결된 데이터셋</h3>
                         <div class="enum-pills">
-                            ${[...connectedDatasets].map(dsId => {
+                            ${[...connectedDatasets].filter(dsId => dsId && graphData.datasets[dsId]).map(dsId => {
                                 const dsMeta = graphData.datasets[dsId];
                                 return `<span class="badge" style="background-color: ${dsMeta.color}; cursor: pointer;" onclick="toggleDatasetFilter('${dsId}', true)">${dsMeta.name_ko}</span>`;
                             }).join('')}
@@ -987,6 +993,7 @@ def generate_html(graph_data: dict) -> str:
             svg.transition().duration(750).call(zoom.transform, transform);
             handleClick(null, targetNode);
         }
+        window.focusOnNode = focusOnNode;
 
         // --- 필터링 및 검색 ---
         const searchInput = document.getElementById('search-input');
@@ -1063,7 +1070,8 @@ def generate_html(graph_data: dict) -> str:
             }
             applyFilters();
         }
-        
+        window.toggleDatasetFilter = toggleDatasetFilter;
+
         // Tier 필터 버튼 생성
         const tierFiltersContainer = document.getElementById('tier-filters');
         [1, 2, 3].forEach(tier => {
