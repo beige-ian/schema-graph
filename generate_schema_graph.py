@@ -1093,7 +1093,7 @@ def generate_html(graph_data: dict) -> str:
         simulation.on("end", () => {
             updateMinimap();
             try {
-                const visibleNodes = nodes.filter(n => n.type === 'table' || n.type === 'external');
+                const visibleNodes = nodes.filter(n => n.type === 'table');
                 if (!visibleNodes.length) return;
                 let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
                 visibleNodes.forEach(n => {
