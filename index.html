@@ -433,7 +433,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 22:33:46</span>
+        <span>Generated at: 2026-03-29 23:06:28</span>
     </footer>
 
     <script>
@@ -4507,6 +4507,35 @@
         "source_system": "Supabase sync",
         "sync_frequency": "daily 01:00 KST",
         "color": "#10b981",
+        "tier": 1
+      }
+    },
+    {
+      "id": "mixpanel.mp_identity_mappings_data_FsxdbqAyTe",
+      "type": "table",
+      "dataset_id": "mixpanel",
+      "table_id": "mp_identity_mappings_data_FsxdbqAyTe",
+      "name_ko": "mp_identity_mappings_data_FsxdbqAyTe",
+      "description": "",
+      "columns": [
+        {
+          "name": "resolved_distinct_id",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "distinct_id",
+          "type": "STRING",
+          "nullable": true
+        }
+      ],
+      "column_count": 2,
+      "dataset_meta": {
+        "id": "mixpanel",
+        "label_ko": "Mixpanel 이벤트",
+        "source_system": "Mixpanel native connector",
+        "sync_frequency": "real-time",
+        "color": "#a855f7",
         "tier": 1
       }
     },
@@ -8950,7 +8979,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 22:33:46"
+  "generated_at": "2026-03-29 23:06:28"
 };
 
         // --- 초기 설정 ---
@@ -9302,8 +9331,22 @@
             try {
                 const visibleNodes = nodes.filter(n => n.type === 'table');
                 if (!visibleNodes.length) return;
+
+                // IQR 기반 outlier 제거 — 메인 클러스터에 포커스
+                const sorted = (arr) => [...arr].sort((a, b) => a - b);
+                const q = (arr, p) => arr[Math.floor(arr.length * p)];
+                const xs = sorted(visibleNodes.map(n => n.x));
+                const ys = sorted(visibleNodes.map(n => n.y));
+                const xQ1 = q(xs, 0.25), xQ3 = q(xs, 0.75), xIQR = xQ3 - xQ1;
+                const yQ1 = q(ys, 0.25), yQ3 = q(ys, 0.75), yIQR = yQ3 - yQ1;
+                const coreNodes = visibleNodes.filter(n =>
+                    n.x >= xQ1 - 1.5 * xIQR && n.x <= xQ3 + 1.5 * xIQR &&
+                    n.y >= yQ1 - 1.5 * yIQR && n.y <= yQ3 + 1.5 * yIQR
+                );
+                const fitNodes = coreNodes.length > 0 ? coreNodes : visibleNodes;
+
                 let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                visibleNodes.forEach(n => {
+                fitNodes.forEach(n => {
                     minX = Math.min(minX, n.x - 70);
                     maxX = Math.max(maxX, n.x + 70);
                     minY = Math.min(minY, n.y - 25);
