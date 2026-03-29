@@ -128,7 +128,7 @@
             overflow-y: auto;
             padding: 16px;
             box-sizing: border-box;
-            transition: margin-right 0.3s ease;
+            transition: transform 0.3s ease;
             position: absolute;
             right: 0;
             top: 0;
@@ -136,7 +136,7 @@
             z-index: 5;
         }
         #side-panel.hidden {
-            margin-right: calc(-1 * var(--sidepanel-width) - 1px);
+            transform: translateX(100%);
         }
         #panel-toggle {
             position: absolute;
@@ -433,7 +433,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 22:19:09</span>
+        <span>Generated at: 2026-03-29 22:33:46</span>
     </footer>
 
     <script>
@@ -8950,7 +8950,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 22:19:09"
+  "generated_at": "2026-03-29 22:33:46"
 };
 
         // --- 초기 설정 ---
