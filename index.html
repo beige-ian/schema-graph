@@ -284,7 +284,10 @@
         .node.dimmed, .link.dimmed { opacity: 0.1; }
         .node.highlighted .node-rect { stroke-width: 3px; }
         .link.highlighted { stroke-opacity: 1; stroke-width: 2.5px; }
-        
+        .node .node-rect.isolated { stroke-dasharray: 4 3; stroke-opacity: 0.5; fill-opacity: 0.5; }
+        .node.isolated-node .node-label { fill-opacity: 0.6; }
+        .dataset-hull { pointer-events: none; transition: opacity 0.3s; }
+
         .dataset-label {
             font-size: 16px;
             font-weight: bold;
@@ -372,7 +375,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 02:26:12</span>
+        <span>Generated at: 2026-03-29 04:13:06</span>
     </footer>
 
     <script>
@@ -498,7 +501,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "auth",
       "name_ko": "auth",
-      "description": "",
+      "description": "전화번호 인증 코드 발급 및 검증 이력",
       "columns": [
         {
           "name": "id",
@@ -552,7 +555,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "block_user",
       "name_ko": "block_user",
-      "description": "",
+      "description": "서비스 이용 정지 처리된 사용자 목록",
       "columns": [
         {
           "name": "id",
@@ -601,7 +604,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "comment",
       "name_ko": "comment",
-      "description": "",
+      "description": "기사·매니저가 주문에 남긴 메모",
       "columns": [
         {
           "name": "id",
@@ -680,7 +683,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "company",
       "name_ko": "company",
-      "description": "",
+      "description": "기업 계약 고객 정보 (B2B)",
       "columns": [
         {
           "name": "id",
@@ -749,7 +752,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "company_address",
       "name_ko": "company_address",
-      "description": "",
+      "description": "기업 고객의 등록 수거 주소 목록",
       "columns": [
         {
           "name": "id",
@@ -808,7 +811,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "company_schedule",
       "name_ko": "company_schedule",
-      "description": "",
+      "description": "기업 고객의 정기수거 요일·시간 스케줄",
       "columns": [
         {
           "name": "id",
@@ -1159,7 +1162,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "display_item",
       "name_ko": "display_item",
-      "description": "",
+      "description": "앱 내 배너·홍보 컨텐츠 관리",
       "columns": [
         {
           "name": "id",
@@ -1366,7 +1369,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "manager",
       "name_ko": "manager",
-      "description": "",
+      "description": "어드민 시스템 접근 권한이 있는 내부 운영자",
       "columns": [
         {
           "name": "id",
@@ -1425,7 +1428,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "optimize_route_meta",
       "name_ko": "optimize_route_meta",
-      "description": "",
+      "description": "기사 배차 경로 최적화 연산 결과 메타데이터",
       "columns": [
         {
           "name": "id",
@@ -1722,7 +1725,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "order_receipt",
       "name_ko": "order_receipt",
-      "description": "",
+      "description": "구 결제 영수증 (현재는 order_receipt_v2 사용)",
       "columns": [
         {
           "name": "id",
@@ -2047,7 +2050,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "prev_db_order",
       "name_ko": "prev_db_order",
-      "description": "",
+      "description": "구 DB에서 이관된 과거 주문 데이터",
       "columns": [
         {
           "name": "id",
@@ -2136,7 +2139,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "receipt",
       "name_ko": "receipt",
-      "description": "",
+      "description": "구 결제 영수증 (invoice 연계)",
       "columns": [
         {
           "name": "id",
@@ -2200,7 +2203,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "region_open_subscriber",
       "name_ko": "region_open_subscriber",
-      "description": "",
+      "description": "서비스 미제공 지역에서 오픈 알림 신청한 사용자",
       "columns": [
         {
           "name": "id",
@@ -2249,7 +2252,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "rider",
       "name_ko": "rider",
-      "description": "",
+      "description": "정기수거 담당 기사 계정 및 활성 상태",
       "columns": [
         {
           "name": "id",
@@ -2333,7 +2336,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "rider_comment_like",
       "name_ko": "rider_comment_like",
-      "description": "",
+      "description": "기사가 주문 코멘트에 누른 좋아요",
       "columns": [
         {
           "name": "id",
@@ -2466,7 +2469,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "service_region_group",
       "name_ko": "service_region_group",
-      "description": "",
+      "description": "서비스 지역을 묶어 관리하는 그룹",
       "columns": [
         {
           "name": "id",
@@ -2515,7 +2518,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "service_region_group_map",
       "name_ko": "service_region_group_map",
-      "description": "",
+      "description": "서비스 지역과 지역 그룹 간 N:M 매핑",
       "columns": [
         {
           "name": "id",
@@ -2879,7 +2882,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "user_coupon",
       "name_ko": "user_coupon",
-      "description": "",
+      "description": "사용자에게 발급된 쿠폰 및 사용 여부",
       "columns": [
         {
           "name": "id",
@@ -2943,7 +2946,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "user_payment_method",
       "name_ko": "user_payment_method",
-      "description": "",
+      "description": "사용자가 등록한 카드·결제 수단",
       "columns": [
         {
           "name": "id",
@@ -3012,7 +3015,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "variant",
       "name_ko": "variant",
-      "description": "",
+      "description": "A/B 테스트의 대조군·실험군 정의",
       "columns": [
         {
           "name": "id",
@@ -3061,7 +3064,7 @@
       "dataset_id": "secure_dataset",
       "table_id": "withdrawal",
       "name_ko": "withdrawal",
-      "description": "",
+      "description": "서비스 탈퇴 사용자의 탈퇴 사유 및 기본 속성",
       "columns": [
         {
           "name": "id",
@@ -3150,7 +3153,7 @@
       "dataset_id": "product",
       "table_id": "ab_test_cheonan_asan",
       "name_ko": "ab_test_cheonan_asan",
-      "description": "",
+      "description": "천안·아산 지역 오픈 AB 테스트 결과",
       "columns": [
         {
           "name": "source",
@@ -3368,7 +3371,7 @@
       "dataset_id": "product",
       "table_id": "brand_msg_experiment_users",
       "name_ko": "brand_msg_experiment_users",
-      "description": "",
+      "description": "브랜드 메시지 AB 테스트 대상 사용자",
       "columns": [
         {
           "name": "user_id",
@@ -3402,7 +3405,7 @@
       "dataset_id": "product",
       "table_id": "brand_msg_wave1",
       "name_ko": "brand_msg_wave1",
-      "description": "",
+      "description": "브랜드 메시지 1차 발송 대상 및 결과",
       "columns": [
         {
           "name": "event_date",
@@ -3466,7 +3469,7 @@
       "dataset_id": "product",
       "table_id": "ext_danggeon_pickup",
       "name_ko": "ext_danggeon_pickup",
-      "description": "",
+      "description": "당근마켓 픽업 서비스 연동 데이터",
       "columns": [
         {
           "name": "seq",
@@ -3570,7 +3573,7 @@
       "dataset_id": "product",
       "table_id": "spot_events",
       "name_ko": "spot_events",
-      "description": "",
+      "description": "스팟 서비스 관련 이벤트 로그 (product 버전)",
       "columns": [
         {
           "name": "event_id",
@@ -3693,7 +3696,7 @@
       "dataset_id": "product",
       "table_id": "spot_user_matching_backup",
       "name_ko": "spot_user_matching_backup",
-      "description": "",
+      "description": "스팟 사용자-수거 매칭 이력 백업본",
       "columns": [
         {
           "name": "row_number",
@@ -3772,7 +3775,7 @@
       "dataset_id": "product",
       "table_id": "spot_waste_items",
       "name_ko": "spot_waste_items",
-      "description": "",
+      "description": "스팟 서비스에서 수거한 폐기물 품목 목록",
       "columns": [
         {
           "name": "row_number",
@@ -4283,7 +4286,7 @@
       "dataset_id": "spot",
       "table_id": "spot_areas",
       "name_ko": "spot_areas",
-      "description": "",
+      "description": "스팟 서비스 운영 가능 구역 정의",
       "columns": [
         {
           "name": "created_at",
@@ -4337,7 +4340,7 @@
       "dataset_id": "spot",
       "table_id": "spot_events",
       "name_ko": "spot_events",
-      "description": "",
+      "description": "스팟 수거 신청·처리 이벤트 로그",
       "columns": [
         {
           "name": "id",
@@ -4430,6 +4433,64 @@
       }
     },
     {
+      "id": "mixpanel.mp_identity_mappings_data_ByyH2sVx0T",
+      "type": "table",
+      "dataset_id": "mixpanel",
+      "table_id": "mp_identity_mappings_data_ByyH2sVx0T",
+      "name_ko": "mp_identity_mappings_data_ByyH2sVx0T",
+      "description": "",
+      "columns": [
+        {
+          "name": "resolved_distinct_id",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "distinct_id",
+          "type": "STRING",
+          "nullable": true
+        }
+      ],
+      "column_count": 2,
+      "dataset_meta": {
+        "id": "mixpanel",
+        "label_ko": "Mixpanel 이벤트",
+        "source_system": "Mixpanel native connector",
+        "sync_frequency": "real-time",
+        "color": "#a855f7",
+        "tier": 1
+      }
+    },
+    {
+      "id": "mixpanel.mp_identity_mappings_data_KGeGUQHrx8",
+      "type": "table",
+      "dataset_id": "mixpanel",
+      "table_id": "mp_identity_mappings_data_KGeGUQHrx8",
+      "name_ko": "mp_identity_mappings_data_KGeGUQHrx8",
+      "description": "",
+      "columns": [
+        {
+          "name": "resolved_distinct_id",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "distinct_id",
+          "type": "STRING",
+          "nullable": true
+        }
+      ],
+      "column_count": 2,
+      "dataset_meta": {
+        "id": "mixpanel",
+        "label_ko": "Mixpanel 이벤트",
+        "source_system": "Mixpanel native connector",
+        "sync_frequency": "real-time",
+        "color": "#a855f7",
+        "tier": 1
+      }
+    },
+    {
       "id": "mixpanel.mp_identity_mappings_data_eZZjx2fejl",
       "type": "table",
       "dataset_id": "mixpanel",
@@ -4459,69 +4520,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_rV1OVclbws",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_rV1OVclbws",
-      "name_ko": "mp_identity_mappings_data_rV1OVclbws",
-      "description": "",
-      "columns": [
-        {
-          "name": "resolved_distinct_id",
-          "type": "STRING",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
       "id": "mixpanel.mp_identity_mappings_data_view",
       "type": "table",
       "dataset_id": "mixpanel",
       "table_id": "mp_identity_mappings_data_view",
       "name_ko": "mp_identity_mappings_data_view",
-      "description": "",
-      "columns": [
-        {
-          "name": "resolved_distinct_id",
-          "type": "STRING",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_identity_mappings_data_w0UvbXqrH5",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_w0UvbXqrH5",
-      "name_ko": "mp_identity_mappings_data_w0UvbXqrH5",
       "description": "",
       "columns": [
         {
@@ -4610,7 +4613,7 @@
       "dataset_id": "mixpanel",
       "table_id": "mp_nessie_export_log",
       "name_ko": "mp_nessie_export_log",
-      "description": "",
+      "description": "Mixpanel → BQ 데이터 내보내기 실행 이력",
       "columns": [
         {
           "name": "job_name",
@@ -4654,40 +4657,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_3e13Bvsi2d",
+      "id": "mixpanel.mp_people_data_YlpE7K19Do",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_3e13Bvsi2d",
-      "name_ko": "mp_people_data_3e13Bvsi2d",
-      "description": "",
-      "columns": [
-        {
-          "name": "properties",
-          "type": "JSON",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_people_data_TPwAR694Nf",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_TPwAR694Nf",
-      "name_ko": "mp_people_data_TPwAR694Nf",
+      "table_id": "mp_people_data_YlpE7K19Do",
+      "name_ko": "mp_people_data_YlpE7K19Do",
       "description": "",
       "columns": [
         {
@@ -4746,7 +4720,7 @@
       "dataset_id": "airbridge_dataset",
       "table_id": "app_events",
       "name_ko": "app_events",
-      "description": "",
+      "description": "앱 내 사용자 행동 이벤트 (Airbridge MMP 수집)",
       "columns": [
         {
           "name": "User_ID",
@@ -5755,7 +5729,7 @@
       "dataset_id": "airbridge_dataset",
       "table_id": "tracking_link_events",
       "name_ko": "tracking_link_events",
-      "description": "",
+      "description": "딥링크·공유 링크 클릭 및 전환 이벤트",
       "columns": [
         {
           "name": "Airbridge_Device_ID",
@@ -6094,7 +6068,7 @@
       "dataset_id": "airbridge_dataset",
       "table_id": "web_events",
       "name_ko": "web_events",
-      "description": "",
+      "description": "웹사이트 방문·전환 이벤트 (Airbridge 수집)",
       "columns": [
         {
           "name": "User_ID",
@@ -6763,7 +6737,7 @@
       "dataset_id": "cx_data",
       "table_id": "channel_talk",
       "name_ko": "channel_talk",
-      "description": "",
+      "description": "채널톡 고객 상담 대화 목록",
       "columns": [
         {
           "name": "id",
@@ -6992,7 +6966,7 @@
       "dataset_id": "cx_data",
       "table_id": "channel_talk_managers",
       "name_ko": "channel_talk_managers",
-      "description": "",
+      "description": "채널톡 상담 담당 내부 운영자 목록",
       "columns": [
         {
           "name": "id",
@@ -7081,7 +7055,7 @@
       "dataset_id": "cx_data",
       "table_id": "channel_talk_messages",
       "name_ko": "channel_talk_messages",
-      "description": "",
+      "description": "채널톡 상담 개별 메시지 내용",
       "columns": [
         {
           "name": "id",
@@ -7140,7 +7114,7 @@
       "dataset_id": "cx_data",
       "table_id": "channel_talk_userchat",
       "name_ko": "channel_talk_userchat",
-      "description": "",
+      "description": "채널톡 고객-상담사 채팅방 단위 메타",
       "columns": [
         {
           "name": "id",
@@ -7334,7 +7308,7 @@
       "dataset_id": "cx_data",
       "table_id": "channel_talk_users",
       "name_ko": "channel_talk_users",
-      "description": "",
+      "description": "채널톡에 등록된 고객 정보",
       "columns": [
         {
           "name": "id",
@@ -7473,7 +7447,7 @@
       "dataset_id": "cx_data",
       "table_id": "channel_talk_workflow",
       "name_ko": "channel_talk_workflow",
-      "description": "",
+      "description": "채널톡 자동 응대 워크플로우 실행 이력",
       "columns": [
         {
           "name": "id",
@@ -7587,7 +7561,7 @@
       "dataset_id": "bag_delivery",
       "table_id": "bag_stock_input",
       "name_ko": "bag_stock_input",
-      "description": "",
+      "description": "150L 봉투 창고 입고 수량 및 날짜",
       "columns": [
         {
           "name": "date",
@@ -7626,7 +7600,7 @@
       "dataset_id": "bag_delivery",
       "table_id": "branch_rider_mapping",
       "name_ko": "branch_rider_mapping",
-      "description": "",
+      "description": "봉투 배송 지점과 담당 기사 간 매핑",
       "columns": [
         {
           "name": "branch",
@@ -7660,7 +7634,7 @@
       "dataset_id": "bag_delivery",
       "table_id": "ext_walla_requests",
       "name_ko": "ext_walla_requests",
-      "description": "",
+      "description": "외부 배송사(왈라) 봉투 배송 요청 이력",
       "columns": [
         {
           "name": "timestamp",
@@ -7734,7 +7708,7 @@
       "dataset_id": "bag_delivery",
       "table_id": "walla_matched_users",
       "name_ko": "walla_matched_users",
-      "description": "",
+      "description": "왈라 배송 서비스와 매칭된 사용자 목록",
       "columns": [
         {
           "name": "response_id",
@@ -7823,7 +7797,7 @@
       "dataset_id": "ads_data",
       "table_id": "daily_cost",
       "name_ko": "daily_cost",
-      "description": "",
+      "description": "채널별 광고 일별 집행 금액",
       "columns": [
         {
           "name": "date",
@@ -7887,7 +7861,7 @@
       "dataset_id": "ads_data",
       "table_id": "daily_cost_creative",
       "name_ko": "daily_cost_creative",
-      "description": "",
+      "description": "광고 소재(이미지·영상)별 일별 집행 금액",
       "columns": [
         {
           "name": "date",
@@ -7966,7 +7940,7 @@
       "dataset_id": "ads_data",
       "table_id": "user_acquisition_channel",
       "name_ko": "user_acquisition_channel",
-      "description": "",
+      "description": "신규 가입 사용자의 유입 광고 채널",
       "columns": [
         {
           "name": "user_id",
@@ -8223,133 +8197,613 @@
       "source": "secure_dataset.user",
       "target": "secure_dataset.order",
       "type": "internal",
-      "description": ""
+      "description": "id → user_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "user_id"
     },
     {
       "source": "secure_dataset.order",
       "target": "secure_dataset.order_receipt_v2",
       "type": "internal",
-      "description": ""
+      "description": "id → order_id",
+      "rel": "1:1",
+      "source_col": "id",
+      "target_col": "order_id"
     },
     {
       "source": "secure_dataset.order",
       "target": "secure_dataset.order_status_log",
       "type": "internal",
-      "description": ""
+      "description": "id → order_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_id"
     },
     {
       "source": "secure_dataset.order",
       "target": "secure_dataset.order_image",
       "type": "internal",
-      "description": ""
+      "description": "id → order_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_id"
     },
     {
       "source": "secure_dataset.user",
       "target": "secure_dataset.user_address",
       "type": "internal",
-      "description": ""
+      "description": "id → user_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "user_id"
     },
     {
       "source": "secure_dataset.user_address",
       "target": "secure_dataset.address",
       "type": "internal",
-      "description": ""
+      "description": "address_id → id",
+      "rel": "N:1",
+      "source_col": "address_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.address",
       "target": "secure_dataset.service_region",
       "type": "internal",
-      "description": ""
+      "description": "h_code → h_code",
+      "rel": "N:1",
+      "source_col": "h_code",
+      "target_col": "h_code"
     },
     {
       "source": "secure_dataset.order",
       "target": "secure_dataset.address",
       "type": "internal",
-      "description": ""
+      "description": "address_id → id",
+      "rel": "N:1",
+      "source_col": "address_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.user",
       "target": "secure_dataset.subscription",
       "type": "internal",
-      "description": ""
+      "description": "id → user_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "user_id"
     },
     {
       "source": "secure_dataset.subscription",
       "target": "secure_dataset.subscription_plan",
       "type": "internal",
-      "description": ""
+      "description": "subscription_plan_id → id",
+      "rel": "N:1",
+      "source_col": "subscription_plan_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.subscription",
       "target": "secure_dataset.subscription_invoice",
       "type": "internal",
-      "description": ""
+      "description": "id → subscription_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "subscription_id"
     },
     {
       "source": "secure_dataset.subscription_invoice",
       "target": "secure_dataset.payment_event",
       "type": "internal",
-      "description": ""
+      "description": "invoice_id → invoice_id",
+      "rel": "1:N",
+      "source_col": "invoice_id",
+      "target_col": "invoice_id"
     },
     {
       "source": "secure_dataset.user",
       "target": "secure_dataset.assignment",
       "type": "internal",
-      "description": ""
+      "description": "id → user_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "user_id"
     },
     {
       "source": "secure_dataset.assignment",
       "target": "secure_dataset.experiment",
       "type": "internal",
-      "description": ""
+      "description": "experiment_id → id",
+      "rel": "N:1",
+      "source_col": "experiment_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.order",
       "target": "secure_dataset.coupon",
       "type": "internal",
-      "description": ""
+      "description": "user_coupon_id → id",
+      "rel": "N:1",
+      "source_col": "user_coupon_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.coupon",
       "target": "secure_dataset.coupon_policy",
       "type": "internal",
-      "description": ""
+      "description": "coupon_policy_id → id",
+      "rel": "N:1",
+      "source_col": "coupon_policy_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.order",
       "target": "secure_dataset.payment_policy",
       "type": "internal",
-      "description": ""
+      "description": "payment_policy_id → id",
+      "rel": "N:1",
+      "source_col": "payment_policy_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.service_region",
       "target": "secure_dataset.payment_policy",
       "type": "internal",
-      "description": ""
+      "description": "payment_policy_id → id",
+      "rel": "N:1",
+      "source_col": "payment_policy_id",
+      "target_col": "id"
     },
     {
       "source": "secure_dataset.user",
       "target": "secure_dataset.device",
       "type": "internal",
-      "description": ""
+      "description": "id → user_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "user_id"
     },
     {
       "source": "secure_dataset.user",
       "target": "mixpanel.mp_master_event",
       "type": "cross-dataset",
-      "description": ""
+      "description": "id → user_id (CAST(user.id AS STRING))",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "user_id"
     },
     {
       "source": "secure_dataset.user",
       "target": "product.spot_user_matching",
       "type": "cross-dataset",
-      "description": ""
+      "description": "id → covering_user_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "covering_user_id"
     },
     {
       "source": "spot.bookings",
       "target": "spot.drivers",
       "type": "internal",
-      "description": ""
+      "description": "driver_id → id",
+      "rel": "N:1",
+      "source_col": "driver_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.assignment",
+      "target": "secure_dataset.variant",
+      "type": "internal",
+      "description": "variant_id → variant.id",
+      "rel": "N:1",
+      "source_col": "variant_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.block_user",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.comment",
+      "target": "secure_dataset.address",
+      "type": "internal",
+      "description": "address_id → address.id",
+      "rel": "N:1",
+      "source_col": "address_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.comment",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.comment",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.comment",
+      "target": "secure_dataset.company",
+      "type": "internal",
+      "description": "company_id → company.id",
+      "rel": "N:1",
+      "source_col": "company_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.comment",
+      "target": "secure_dataset.manager",
+      "type": "internal",
+      "description": "manager_id → manager.id",
+      "rel": "N:1",
+      "source_col": "manager_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.comment",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → rider.id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.company_address",
+      "target": "secure_dataset.company",
+      "type": "internal",
+      "description": "company_id → company.id",
+      "rel": "N:1",
+      "source_col": "company_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.company_address",
+      "target": "secure_dataset.address",
+      "type": "internal",
+      "description": "address_id → address.id",
+      "rel": "N:1",
+      "source_col": "address_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.company_schedule",
+      "target": "secure_dataset.company",
+      "type": "internal",
+      "description": "company_id → company.id",
+      "rel": "N:1",
+      "source_col": "company_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.company_schedule",
+      "target": "secure_dataset.company_address",
+      "type": "internal",
+      "description": "company_address_id → company_address.id",
+      "rel": "N:1",
+      "source_col": "company_address_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.optimize_route_meta",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → rider.id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order",
+      "target": "secure_dataset.company",
+      "type": "internal",
+      "description": "company_id → company.id",
+      "rel": "N:1",
+      "source_col": "company_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → rider.id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order",
+      "target": "secure_dataset.user_coupon",
+      "type": "internal",
+      "description": "user_coupon_id → user_coupon.id",
+      "rel": "N:1",
+      "source_col": "user_coupon_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_receipt",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_receipt_v2",
+      "target": "secure_dataset.user_payment_method",
+      "type": "internal",
+      "description": "user_payment_method_id → user_payment_method.id",
+      "rel": "N:1",
+      "source_col": "user_payment_method_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_status_log",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_status_log",
+      "target": "secure_dataset.company",
+      "type": "internal",
+      "description": "company_id → company.id",
+      "rel": "N:1",
+      "source_col": "company_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_status_log",
+      "target": "secure_dataset.manager",
+      "type": "internal",
+      "description": "manager_id → manager.id",
+      "rel": "N:1",
+      "source_col": "manager_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_status_log",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → rider.id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.payment_event",
+      "target": "secure_dataset.invoice",
+      "type": "internal",
+      "description": "invoice_id → invoice.id",
+      "rel": "N:1",
+      "source_col": "invoice_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.payment_event",
+      "target": "secure_dataset.user_payment_method",
+      "type": "internal",
+      "description": "user_payment_method_id → user_payment_method.id",
+      "rel": "N:1",
+      "source_col": "user_payment_method_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.prev_db_order",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.receipt",
+      "target": "secure_dataset.invoice",
+      "type": "internal",
+      "description": "invoice_id → invoice.id",
+      "rel": "N:1",
+      "source_col": "invoice_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.receipt",
+      "target": "secure_dataset.user_payment_method",
+      "type": "internal",
+      "description": "user_payment_method_id → user_payment_method.id",
+      "rel": "N:1",
+      "source_col": "user_payment_method_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.region_open_subscriber",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.region_open_subscriber",
+      "target": "secure_dataset.service_region",
+      "type": "internal",
+      "description": "service_region_id → service_region.id",
+      "rel": "N:1",
+      "source_col": "service_region_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.rider_comment_like",
+      "target": "secure_dataset.comment",
+      "type": "internal",
+      "description": "comment_id → comment.id",
+      "rel": "N:1",
+      "source_col": "comment_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.rider_comment_like",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → rider.id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.service_region_group_map",
+      "target": "secure_dataset.service_region_group",
+      "type": "internal",
+      "description": "service_region_group_id → service_region_group.id",
+      "rel": "N:1",
+      "source_col": "service_region_group_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.service_region_group_map",
+      "target": "secure_dataset.service_region",
+      "type": "internal",
+      "description": "service_region_id → service_region.id",
+      "rel": "N:1",
+      "source_col": "service_region_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.subscription_invoice",
+      "target": "secure_dataset.invoice",
+      "type": "internal",
+      "description": "invoice_id → invoice.id",
+      "rel": "N:1",
+      "source_col": "invoice_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.user",
+      "target": "secure_dataset.payment_policy",
+      "type": "internal",
+      "description": "payment_policy_id → payment_policy.id",
+      "rel": "N:1",
+      "source_col": "payment_policy_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.user_coupon",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.user_coupon",
+      "target": "secure_dataset.coupon",
+      "type": "internal",
+      "description": "coupon_id → coupon.id",
+      "rel": "N:1",
+      "source_col": "coupon_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.user_coupon",
+      "target": "secure_dataset.coupon_policy",
+      "type": "internal",
+      "description": "coupon_policy_id → coupon_policy.id",
+      "rel": "N:1",
+      "source_col": "coupon_policy_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.user_payment_method",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.variant",
+      "target": "secure_dataset.experiment",
+      "type": "internal",
+      "description": "experiment_id → experiment.id",
+      "rel": "N:1",
+      "source_col": "experiment_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.withdrawal",
+      "target": "secure_dataset.user",
+      "type": "internal",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "product.brand_msg_experiment_users",
+      "target": "secure_dataset.user",
+      "type": "cross-dataset",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "mixpanel.mp_master_event",
+      "target": "secure_dataset.device",
+      "type": "cross-dataset",
+      "description": "device_id → device.id",
+      "rel": "N:1",
+      "source_col": "device_id",
+      "target_col": "id"
+    },
+    {
+      "source": "bag_delivery.branch_rider_mapping",
+      "target": "secure_dataset.rider",
+      "type": "cross-dataset",
+      "description": "rider_id → rider.id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "bag_delivery.walla_matched_users",
+      "target": "secure_dataset.user",
+      "type": "cross-dataset",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "ads_data.user_acquisition_channel",
+      "target": "secure_dataset.user",
+      "type": "cross-dataset",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
     }
   ],
   "datasets": {
@@ -8418,7 +8872,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 02:26:12"
+  "generated_at": "2026-03-29 04:13:06"
 };
 
         // --- 초기 설정 ---
@@ -8435,7 +8889,7 @@
         });
         const dsNodes = graphData.dataset_nodes;
         const totalTables = graphData.tables.length || 1;
-        const clusterRadius = Math.min(width, height) * 0.35;
+        const clusterRadius = Math.min(width, height) * 0.45;
 
         // 각 데이터셋에 테이블 수 비례 각도 할당 (최소 15° 보장)
         const minAngle = Math.PI / 12; // 15°
@@ -8460,9 +8914,49 @@
             const anchor = dsAnchorMap.get(t.dataset_id);
             if (anchor) {
                 const count = dsTableCounts.get(t.dataset_id) || 1;
-                const scatter = Math.min(60 + count * 8, 200);
-                t.x = anchor.x + (Math.random() - 0.5) * scatter;
-                t.y = anchor.y + (Math.random() - 0.5) * scatter;
+                const scatter = Math.min(80 + Math.sqrt(count) * 55, 600);
+                if (t.isIsolated) {
+                    // 관계 없는 테이블은 클러스터 외곽 호(arc)에 배치
+                    const isolatedInDs = graphData.tables.filter(n => n.isIsolated && n.dataset_id === t.dataset_id);
+                    const idx = isolatedInDs.indexOf(t);
+                    const total = isolatedInDs.length;
+                    const arcAngle = Math.atan2(anchor.fy || anchor.y, anchor.fx || anchor.x);
+                    const startAngle = arcAngle - Math.PI / 6;
+                    const angle = startAngle + (Math.PI / 3) * (idx / Math.max(total - 1, 1));
+                    t.x = (anchor.fx || anchor.x) + Math.cos(angle) * scatter * 0.85;
+                    t.y = (anchor.fy || anchor.y) + Math.sin(angle) * scatter * 0.85;
+                } else {
+                    t.x = (anchor.fx || anchor.x) + (Math.random() - 0.5) * scatter;
+                    t.y = (anchor.fy || anchor.y) + (Math.random() - 0.5) * scatter;
+                }
+            }
+        });
+
+        // 외부 시스템 초기 배치: 연결된 데이터셋 앵커 평균 위치 바깥쪽
+        const isolatedExternals = graphData.external_nodes.filter(e => (e.connected_datasets || []).length === 0);
+        graphData.external_nodes.forEach(ext => {
+            const connDs = ext.connected_datasets || [];
+            if (connDs.length > 0) {
+                let avgX = 0, avgY = 0, cnt = 0;
+                connDs.forEach(dsId => {
+                    const anchor = dsAnchorMap.get(dsId);
+                    if (anchor) { avgX += (anchor.fx || anchor.x); avgY += (anchor.fy || anchor.y); cnt++; }
+                });
+                if (cnt > 0) {
+                    avgX /= cnt; avgY /= cnt;
+                    const angle = Math.atan2(avgY, avgX);
+                    const dist = Math.sqrt(avgX * avgX + avgY * avgY);
+                    ext.x = avgX + Math.cos(angle) * Math.max(130, dist * 0.4);
+                    ext.y = avgY + Math.sin(angle) * Math.max(130, dist * 0.4);
+                }
+            } else {
+                // 연결 데이터셋 없는 외부 시스템: 외곽 원 균등 배치
+                const idx = isolatedExternals.indexOf(ext);
+                const total = isolatedExternals.length;
+                const angle = -Math.PI / 2 + (2 * Math.PI * idx / Math.max(total, 1));
+                const outerRadius = clusterRadius * 1.6;
+                ext.x = Math.cos(angle) * outerRadius;
+                ext.y = Math.sin(angle) * outerRadius;
             }
         });
 
@@ -8477,6 +8971,14 @@
             link.target = nodeMap.get(link.target);
             return link.source && link.target;
         });
+
+        // 관계 없는 테이블 감지
+        const connectedNodeIds = new Set();
+        validLinks.forEach(l => {
+            connectedNodeIds.add(l.source.id || l.source);
+            connectedNodeIds.add(l.target.id || l.target);
+        });
+        graphData.tables.forEach(t => { t.isIsolated = !connectedNodeIds.has(t.id); });
 
         const tierColors = {
             1: 'var(--tier1-color)',
@@ -8512,13 +9014,61 @@
             .attr("fill", "rgba(255,255,255,0.5)");
 
         const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(100))
-            .force("charge", d3.forceManyBody().strength(-250))
-            .force("center", d3.forceCenter(0, 0))
-            .force("cluster", forceCluster()) // 커스텀 클러스터 force
-            .force("collide", d3.forceCollide().radius(40));
+            .force("link", d3.forceLink(validLinks).id(d => d.id)
+                .distance(d => d.type === 'cross-dataset' ? 200 : (d.type === 'external' ? 160 : 100))
+                .strength(d => d.type === 'cross-dataset' ? 0.3 : 0.7))
+            .force("charge", d3.forceManyBody().strength(d => {
+                if (d.type === 'dataset') return 0;
+                if (d.type === 'external') return -150;
+                return -350;
+            }))
+            .force("x", d3.forceX(0).strength(0.01))
+            .force("y", d3.forceY(0).strength(0.01))
+            .force("cluster", forceCluster())
+            .force("collide", d3.forceCollide().radius(d => {
+                if (d.type === 'table') return 75;
+                if (d.type === 'external') return 70;
+                return 0;
+            }).strength(0.8))
+            .alphaDecay(0.02)
+            .velocityDecay(0.3);
 
         // --- 요소 렌더링 ---
+        // 데이터셋 경계 Hull (링크·노드 아래 레이어)
+        const hullGroup = mainGroup.append("g").attr("class", "hulls");
+        const hullPaths = hullGroup.selectAll("path")
+            .data(graphData.dataset_nodes)
+            .join("path")
+            .attr("class", "dataset-hull")
+            .attr("fill", d => d.color + "10")
+            .attr("stroke", d => d.color + "30")
+            .attr("stroke-width", 1.5)
+            .attr("stroke-linejoin", "round");
+
+        function updateHulls() {
+            hullPaths.attr("d", d => {
+                const clusterNodes = nodes.filter(n => n.type === 'table' && n.dataset_id === d.dataset_id);
+                if (clusterNodes.length === 0) return null;
+                if (clusterNodes.length === 1) {
+                    const n = clusterNodes[0];
+                    const pad = 35;
+                    return `M${n.x - pad},${n.y - pad}L${n.x + pad},${n.y - pad}L${n.x + pad},${n.y + pad}L${n.x - pad},${n.y + pad}Z`;
+                }
+                const points = clusterNodes.map(n => [n.x, n.y]);
+                const hull = d3.polygonHull(points);
+                if (!hull) return null;
+                const centroid = d3.polygonCentroid(hull);
+                const pad = 45;
+                const expanded = hull.map(p => {
+                    const dx = p[0] - centroid[0];
+                    const dy = p[1] - centroid[1];
+                    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                    return [p[0] + dx / dist * pad, p[1] + dy / dist * pad];
+                });
+                return d3.line().curve(d3.curveCatmullRomClosed.alpha(0.8))(expanded);
+            });
+        }
+
         const link = mainGroup.append("g")
             .attr("class", "links")
             .selectAll("line")
@@ -8526,6 +9076,8 @@
             .join("line")
             .attr("class", d => `link ${d.type}`)
             .attr("marker-end", "url(#end)");
+
+        link.append("title").text(d => [d.rel, d.description].filter(Boolean).join(' | '));
 
         const node = mainGroup.append("g")
             .attr("class", "nodes")
@@ -8542,8 +9094,8 @@
             .attr("x", -65)
             .attr("y", -18)
             .attr("rx", 8)
-            .attr("class", "node-rect")
-            .attr("fill", d => d.dataset_meta.color + '20') // 20은 투명도
+            .attr("class", d => `node-rect${d.isIsolated ? ' isolated' : ''}`)
+            .attr("fill", d => d.dataset_meta.color + '20')
             .attr("stroke", d => d.dataset_meta.color);
 
         // 외부 시스템 노드 (polygon, 다이아몬드)
@@ -8593,10 +9145,11 @@
             mainGroup.attr("transform", transform);
             updateMinimapViewRect(transform);
 
-            // 시맨틱 줌
             const k = transform.k;
             node.select(".node-label-cols").style("display", k > 1.0 ? "inline" : "none");
-            datasetLabels.style("opacity", k < 0.4 ? 0.7 : 0);
+            datasetLabels.style("opacity", k < 0.7 ? Math.min(0.85, (0.7 - k) / 0.3 + 0.1) : 0);
+            hullPaths.style("opacity", Math.max(0.4, Math.min(1.0, 1.5 - k)));
+            node.selectAll(".node-label").style("display", k < 0.2 ? "none" : null);
         }
 
         // --- 시뮬레이션 tick ---
@@ -8639,28 +9192,83 @@
                 });
 
             node.attr("transform", d => `translate(${d.x}, ${d.y})`);
-            
+
             datasetLabels
-                .attr("x", d => d.x)
-                .attr("y", d => d.y);
+                .attr("x", d => {
+                    const ns = nodes.filter(n => n.type === 'table' && n.dataset_id === d.dataset_id);
+                    return ns.length ? ns.reduce((s, n) => s + n.x, 0) / ns.length : d.x;
+                })
+                .attr("y", d => {
+                    const ns = nodes.filter(n => n.type === 'table' && n.dataset_id === d.dataset_id);
+                    return ns.length ? Math.min(...ns.map(n => n.y)) - 28 : d.y;
+                });
+
+            updateHulls();
         });
-        
+
+        // 시뮬레이션 안정화 후 전체 그래프 화면 자동 맞춤
+        simulation.on("end", () => {
+            updateMinimap();
+            try {
+                const bounds = mainGroup.node().getBBox();
+                if (!bounds.width || !bounds.height) return;
+                const pad = 60;
+                const bw = bounds.width + 2 * pad;
+                const bh = bounds.height + 2 * pad;
+                const scale = Math.min(width / bw, height / bh, 1.0);
+                const cx = bounds.x + bounds.width / 2;
+                const cy = bounds.y + bounds.height / 2;
+                svg.transition().duration(1000).call(
+                    zoom.transform,
+                    d3.zoomIdentity.translate(width / 2, height / 2).scale(scale).translate(-cx, -cy)
+                );
+            } catch (e) {}
+        });
+
         // --- 커스텀 클러스터 Force ---
         function forceCluster() {
-            let nodes, strength = 0.6;
+            let allNodes;
             const clusterAnchors = new Map(graphData.dataset_nodes.map(d => [d.dataset_id, d]));
 
+            // 외부 시스템 타깃 위치 사전 계산
+            const externalTargets = new Map();
+            graphData.external_nodes.forEach(ext => {
+                const connDs = ext.connected_datasets || [];
+                if (connDs.length > 0) {
+                    let avgX = 0, avgY = 0, cnt = 0;
+                    connDs.forEach(dsId => {
+                        const anchor = clusterAnchors.get(dsId);
+                        if (anchor) { avgX += (anchor.fx || anchor.x); avgY += (anchor.fy || anchor.y); cnt++; }
+                    });
+                    if (cnt > 0) {
+                        avgX /= cnt; avgY /= cnt;
+                        const angle = Math.atan2(avgY, avgX);
+                        const dist = Math.sqrt(avgX * avgX + avgY * avgY);
+                        externalTargets.set(ext.id, { x: avgX + Math.cos(angle) * Math.max(130, dist * 0.4), y: avgY + Math.sin(angle) * Math.max(130, dist * 0.4) });
+                    }
+                }
+            });
+
             function force(alpha) {
-                for (const node of nodes) {
-                    if (node.type !== 'table') continue;
-                    const anchor = clusterAnchors.get(node.dataset_id);
-                    if (!anchor || anchor === node) continue;
-                    
-                    node.vx -= (node.x - anchor.x) * strength * alpha;
-                    node.vy -= (node.y - anchor.y) * strength * alpha;
+                for (const n of allNodes) {
+                    if (n.type === 'table') {
+                        const anchor = clusterAnchors.get(n.dataset_id);
+                        if (!anchor || anchor === n) continue;
+                        const count = dsTableCounts.get(n.dataset_id) || 1;
+                        // 클러스터 크기에 따라 인력 약화 (40개=0.1, 3개=0.56)
+                        const strength = Math.max(0.1, 0.6 - count / 80);
+                        n.vx -= (n.x - (anchor.fx || anchor.x)) * strength * alpha;
+                        n.vy -= (n.y - (anchor.fy || anchor.y)) * strength * alpha;
+                    } else if (n.type === 'external') {
+                        const target = externalTargets.get(n.id);
+                        if (target) {
+                            n.vx -= (n.x - target.x) * 0.3 * alpha;
+                            n.vy -= (n.y - target.y) * 0.3 * alpha;
+                        }
+                    }
                 }
             }
-            force.initialize = _ => nodes = _;
+            force.initialize = _ => allNodes = _;
             return force;
         }
 
