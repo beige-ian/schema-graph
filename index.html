@@ -9415,6 +9415,7 @@
                 .on("end", dragended);
         }
         node.on("dblclick", (event, d) => {
+            event.stopPropagation();
             if (d.type === 'external') return;
             d.fx = null;
             d.fy = null;
@@ -9489,7 +9490,7 @@
         Object.values(graphData.datasets).forEach(ds => {
             const item = document.createElement('div');
             item.className = 'legend-item';
-            item.innerHTML = `<span class="l-dot" style="background:${ds.color};"></span>${ds.name_ko}`;
+            item.innerHTML = `<span class="l-dot" style="background:${ds.color};"></span>${ds.label_ko}`;
             legendDs.appendChild(item);
         });
 
@@ -9512,7 +9513,7 @@
             let content = '';
             if (d.type === 'table') {
                 const dsMeta = d.dataset_meta;
-                const badge = `<span class="badge" style="background-color: ${dsMeta.color};">${dsMeta.name_ko}</span>`;
+                const badge = `<span class="badge" style="background-color: ${dsMeta.color};">${dsMeta.label_ko}</span>`;
                 const connectedLinks = validLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
 
                 content = `
@@ -9575,7 +9576,7 @@
                         <div class="enum-pills">
                             ${[...connectedDatasets].filter(dsId => dsId && graphData.datasets[dsId]).map(dsId => {
                                 const dsMeta = graphData.datasets[dsId];
-                                return `<span class="badge" style="background-color: ${dsMeta.color}; cursor: pointer;" onclick="toggleDatasetFilter('${dsId}', true)">${dsMeta.name_ko}</span>`;
+                                return `<span class="badge" style="background-color: ${dsMeta.color}; cursor: pointer;" onclick="toggleDatasetFilter('${dsId}', true)">${dsMeta.label_ko}</span>`;
                             }).join('')}
                         </div>
                     </div>
@@ -9650,7 +9651,7 @@
         Object.entries(graphData.datasets).forEach(([id, meta]) => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn active';
-            btn.textContent = meta.name_ko;
+            btn.textContent = meta.label_ko;
             btn.dataset.filter = id;
             btn.style.setProperty('--color', meta.color);
             btn.style.setProperty('--color-bg', meta.color + '40');
