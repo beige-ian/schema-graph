@@ -255,11 +255,11 @@
             text-anchor: middle;
             dominant-baseline: middle;
         }
-        .node .node-label-ko { dy: -5px; }
-        .node .node-label-id { dy: 8px; font-size: 10px; fill: var(--text-muted-color); }
-        .node .node-label-cols { display: none; dy: 22px; font-size: 10px; fill: var(--accent-color); }
-        
-        .node.external .node-label-ko { dy: 0; }
+        .node .node-label-ko { }
+        .node .node-label-id { font-size: 10px; fill: var(--text-muted-color); }
+        .node .node-label-cols { display: none; font-size: 10px; fill: var(--accent-color); }
+
+        .node.external .node-label-ko { }
         .node.external .node-polygon {
             stroke-width: 1.5px;
             stroke-dasharray: 4 2;
@@ -372,7 +372,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-28 18:19:32</span>
+        <span>Generated at: 2026-03-29 02:16:28</span>
     </footer>
 
     <script>
@@ -4430,11 +4430,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_0pcuHWRiVk",
+      "id": "mixpanel.mp_identity_mappings_data_eZZjx2fejl",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_0pcuHWRiVk",
-      "name_ko": "mp_identity_mappings_data_0pcuHWRiVk",
+      "table_id": "mp_identity_mappings_data_eZZjx2fejl",
+      "name_ko": "mp_identity_mappings_data_eZZjx2fejl",
       "description": "",
       "columns": [
         {
@@ -4459,11 +4459,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_EW33FcTPGL",
+      "id": "mixpanel.mp_identity_mappings_data_rV1OVclbws",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_EW33FcTPGL",
-      "name_ko": "mp_identity_mappings_data_EW33FcTPGL",
+      "table_id": "mp_identity_mappings_data_rV1OVclbws",
+      "name_ko": "mp_identity_mappings_data_rV1OVclbws",
       "description": "",
       "columns": [
         {
@@ -4517,11 +4517,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_wLAQTnsLnX",
+      "id": "mixpanel.mp_identity_mappings_data_w0UvbXqrH5",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_wLAQTnsLnX",
-      "name_ko": "mp_identity_mappings_data_wLAQTnsLnX",
+      "table_id": "mp_identity_mappings_data_w0UvbXqrH5",
+      "name_ko": "mp_identity_mappings_data_w0UvbXqrH5",
       "description": "",
       "columns": [
         {
@@ -4654,11 +4654,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_5g3W3c3ylZ",
+      "id": "mixpanel.mp_people_data_3e13Bvsi2d",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_5g3W3c3ylZ",
-      "name_ko": "mp_people_data_5g3W3c3ylZ",
+      "table_id": "mp_people_data_3e13Bvsi2d",
+      "name_ko": "mp_people_data_3e13Bvsi2d",
       "description": "",
       "columns": [
         {
@@ -4683,11 +4683,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_n4jpuDKqqI",
+      "id": "mixpanel.mp_people_data_TPwAR694Nf",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_n4jpuDKqqI",
-      "name_ko": "mp_people_data_n4jpuDKqqI",
+      "table_id": "mp_people_data_TPwAR694Nf",
+      "name_ko": "mp_people_data_TPwAR694Nf",
       "description": "",
       "columns": [
         {
@@ -8418,7 +8418,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-28 18:19:32"
+  "generated_at": "2026-03-29 02:16:28"
 };
 
         // --- 초기 설정 ---
@@ -8427,6 +8427,26 @@
         
         const nodes = [...graphData.tables, ...graphData.external_nodes, ...graphData.dataset_nodes];
         const links = graphData.edges;
+
+        // 데이터셋 앵커를 원형으로 초기 배치 → 클러스터 분리 보장
+        const dsNodes = graphData.dataset_nodes;
+        const clusterRadius = Math.min(width, height) * 0.35;
+        dsNodes.forEach((d, i) => {
+            const angle = (2 * Math.PI * i) / dsNodes.length - Math.PI / 2;
+            d.x = Math.cos(angle) * clusterRadius;
+            d.y = Math.sin(angle) * clusterRadius;
+            d.fx = d.x;
+            d.fy = d.y;
+        });
+        // 테이블 노드를 소속 앵커 근처에 초기 배치
+        const dsAnchorMap = new Map(dsNodes.map(d => [d.dataset_id, d]));
+        graphData.tables.forEach(t => {
+            const anchor = dsAnchorMap.get(t.dataset_id);
+            if (anchor) {
+                t.x = anchor.x + (Math.random() - 0.5) * 150;
+                t.y = anchor.y + (Math.random() - 0.5) * 150;
+            }
+        });
 
         if (nodes.length === 0) {
             document.querySelector('main').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#aaa;font-size:1.2rem;"><p>표시할 데이터가 없습니다. schema_config.py 설정을 확인해 주세요.</p></div>';
@@ -8474,11 +8494,11 @@
             .attr("fill", "rgba(255,255,255,0.5)");
 
         const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(200))
-            .force("charge", d3.forceManyBody().strength(-600))
+            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(120))
+            .force("charge", d3.forceManyBody().strength(-300))
             .force("center", d3.forceCenter(0, 0))
             .force("cluster", forceCluster()) // 커스텀 클러스터 force
-            .force("collide", d3.forceCollide().radius(80));
+            .force("collide", d3.forceCollide().radius(50));
 
         // --- 요소 렌더링 ---
         const link = mainGroup.append("g")
@@ -8518,16 +8538,20 @@
         
         labels.append("tspan") // 한글 이름
             .attr("class", "node-label-ko")
+            .attr("x", 0)
+            .attr("dy", d => d.type === 'table' ? "-0.4em" : "0.35em")
             .text(d => d.name_ko);
-            
+
         labels.filter(d => d.type === 'table').append("tspan") // 영문 ID
             .attr("class", "node-label-id")
             .attr("x", 0)
+            .attr("dy", "1.2em")
             .text(d => d.table_id);
 
         labels.filter(d => d.type === 'table').append("tspan") // 컬럼 수
             .attr("class", "node-label-cols")
             .attr("x", 0)
+            .attr("dy", "1.2em")
             .text(d => `${d.column_count} columns`);
 
         // 데이터셋 레이블
@@ -8605,7 +8629,7 @@
         
         // --- 커스텀 클러스터 Force ---
         function forceCluster() {
-            let nodes, strength = 0.1;
+            let nodes, strength = 0.6;
             const clusterAnchors = new Map(graphData.dataset_nodes.map(d => [d.dataset_id, d]));
 
             function force(alpha) {
