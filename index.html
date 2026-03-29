@@ -432,7 +432,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 10:06:22</span>
+        <span>Generated at: 2026-03-29 10:23:54</span>
     </footer>
 
     <script>
@@ -4734,12 +4734,12 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_view",
+      "id": "mixpanel.mp_people_data_vS0mD9Rcyf",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_view",
-      "name_ko": "mp_people_data_view",
-      "description": "Mixpanel 사용자 속성 데이터",
+      "table_id": "mp_people_data_vS0mD9Rcyf",
+      "name_ko": "mp_people_data_vS0mD9Rcyf",
+      "description": "",
       "columns": [
         {
           "name": "properties",
@@ -4763,12 +4763,12 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_xpW7JMm54z",
+      "id": "mixpanel.mp_people_data_view",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_xpW7JMm54z",
-      "name_ko": "mp_people_data_xpW7JMm54z",
-      "description": "",
+      "table_id": "mp_people_data_view",
+      "name_ko": "mp_people_data_view",
+      "description": "Mixpanel 사용자 속성 데이터",
       "columns": [
         {
           "name": "properties",
@@ -8949,7 +8949,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 10:06:22"
+  "generated_at": "2026-03-29 10:23:54"
 };
 
         // --- 초기 설정 ---
@@ -9291,9 +9291,12 @@
             updateHulls();
         });
 
-        // 시뮬레이션 안정화 후 전체 그래프 화면 자동 맞춤
+        // 시뮬레이션 안정화 후 전체 그래프 화면 자동 맞춤 (최초 1회만)
+        let initialFitDone = false;
         simulation.on("end", () => {
             updateMinimap();
+            if (initialFitDone) return;
+            initialFitDone = true;
             try {
                 const visibleNodes = nodes.filter(n => n.type === 'table');
                 if (!visibleNodes.length) return;
