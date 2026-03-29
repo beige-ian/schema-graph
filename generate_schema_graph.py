@@ -559,6 +559,8 @@ def generate_html(graph_data: dict) -> str:
         .link {
             stroke-opacity: 0.6;
             transition: stroke-opacity 0.2s, stroke 0.2s;
+            pointer-events: visibleStroke;
+            cursor: default;
         }
         .link.internal { stroke: rgba(255,255,255,0.2); }
         .link.cross-dataset { stroke: rgba(255,255,255,0.5); stroke-dasharray: 5 5; }
@@ -649,6 +651,14 @@ def generate_html(graph_data: dict) -> str:
         }
         .login-box button:hover { opacity: 0.9; }
         .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
+        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .legend-toggle { width: 100%; padding: 8px 12px; background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 13px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .legend-body { padding: 4px 12px 10px; display: none; }
+        .legend-body.open { display: block; }
+        .legend-section { font-size: 10px; color: var(--secondary-text); margin: 6px 0 3px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 3px 0; color: var(--text-color); }
+        .l-line { flex-shrink: 0; }
+        .l-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
     </style>
 </head>
@@ -689,6 +699,21 @@ def generate_html(graph_data: dict) -> str:
                 <button id="zoom-out">-</button>
             </div>
             <div class="minimap" id="minimap"></div>
+            <div class="legend-panel" id="legend-panel">
+                <button class="legend-toggle" id="legend-toggle">범례 <span id="legend-arrow">▲</span></button>
+                <div class="legend-body open" id="legend-body">
+                    <div class="legend-section">관계선</div>
+                    <div class="legend-item"><svg class="l-line" width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/><polygon points="20,2 28,5 20,8" fill="rgba(255,255,255,0.7)"/></svg>내부 관계</div>
+                    <div class="legend-item"><svg class="l-line" width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/><polygon points="20,2 28,5 20,8" fill="rgba(255,255,255,0.7)"/></svg>데이터셋 간</div>
+                    <div class="legend-item"><svg class="l-line" width="28" height="10"><line x1="0" y1="5" x2="28" y2="5" stroke="#60a5fa" stroke-width="1.5" stroke-dasharray="6,3"/><polygon points="20,2 28,5 20,8" fill="#60a5fa"/></svg>외부 시스템</div>
+                    <div class="legend-section">노드</div>
+                    <div class="legend-item"><svg class="l-line" width="20" height="14"><rect x="1" y="2" width="18" height="10" rx="2" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/></svg>테이블</div>
+                    <div class="legend-item"><svg class="l-line" width="20" height="14"><polygon points="10,1 19,7 10,13 1,7" fill="none" stroke="#60a5fa" stroke-width="1.5"/></svg>외부 시스템</div>
+                    <div class="legend-item"><svg class="l-line" width="20" height="14"><rect x="1" y="2" width="18" height="10" rx="2" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-dasharray="3,2"/></svg>연결 없음</div>
+                    <div class="legend-section">데이터셋</div>
+                    <div id="legend-datasets"></div>
+                </div>
+            </div>
         </div>
         <div id="side-panel" class="hidden"></div>
         <button id="panel-toggle" class="panel-hidden">&lt;</button>
@@ -830,6 +855,18 @@ def generate_html(graph_data: dict) -> str:
         });
         graphData.tables.forEach(t => { t.isIsolated = !connectedNodeIds.has(t.id); });
 
+        // 노드별 연결 수 계산 → 크기 가변 (E)
+        const _connCount = new Map();
+        validLinks.forEach(l => {
+            _connCount.set(l.source.id, (_connCount.get(l.source.id) || 0) + 1);
+            _connCount.set(l.target.id, (_connCount.get(l.target.id) || 0) + 1);
+        });
+        graphData.tables.forEach(t => {
+            t.connections = _connCount.get(t.id) || 0;
+            t._w = 130 + Math.min(t.connections, 8) * 8;
+            t._h = 36 + Math.min(t.connections, 8) * 2;
+        });
+
         const tierColors = {
             1: 'var(--tier1-color)',
             2: 'var(--tier2-color)',
@@ -856,12 +893,12 @@ def generate_html(graph_data: dict) -> str:
             .attr("viewBox", "0 -5 10 10")
             .attr("refX", 10)
             .attr("refY", 0)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
+            .attr("markerWidth", 10)
+            .attr("markerHeight", 10)
             .attr("orient", "auto")
             .append("path")
             .attr("d", "M0,-5L10,0L0,5")
-            .attr("fill", "rgba(255,255,255,0.5)");
+            .attr("fill", "rgba(255,255,255,0.8)");
 
         const simulation = d3.forceSimulation(nodes)
             .force("link", d3.forceLink(validLinks).id(d => d.id)
@@ -876,7 +913,7 @@ def generate_html(graph_data: dict) -> str:
             .force("y", d3.forceY(0).strength(0.01))
             .force("cluster", forceCluster())
             .force("collide", d3.forceCollide().radius(d => {
-                if (d.type === 'table') return 75;
+                if (d.type === 'table') return Math.sqrt((d._w||130)**2 + (d._h||36)**2) / 2 + 8;
                 if (d.type === 'external') return 70;
                 return 0;
             }).strength(0.8))
@@ -919,12 +956,29 @@ def generate_html(graph_data: dict) -> str:
             });
         }
 
+        // 병렬 관계선 오프셋 계산 (겹침 방지, B)
+        const _pairCount = new Map();
+        validLinks.forEach(l => {
+            const key = [l.source.id, l.target.id].sort().join('__');
+            _pairCount.set(key, (_pairCount.get(key) || 0) + 1);
+        });
+        const _pairIdx = new Map();
+        validLinks.forEach(l => {
+            const key = [l.source.id, l.target.id].sort().join('__');
+            const idx = _pairIdx.get(key) || 0;
+            const cnt = _pairCount.get(key) || 1;
+            l._offset = (idx - (cnt - 1) / 2) * 16;
+            l._parallel = cnt;
+            _pairIdx.set(key, idx + 1);
+        });
+
         const link = mainGroup.append("g")
             .attr("class", "links")
-            .selectAll("line")
+            .selectAll("path")
             .data(validLinks)
-            .join("line")
+            .join("path")
             .attr("class", d => `link ${d.type}`)
+            .attr("fill", "none")
             .attr("marker-end", "url(#end)");
 
         link.append("title").text(d => [d.rel, d.description].filter(Boolean).join(' | '));
@@ -939,10 +993,10 @@ def generate_html(graph_data: dict) -> str:
 
         // 테이블 노드 (rect)
         node.filter(d => d.type === 'table').append("rect")
-            .attr("width", 130)
-            .attr("height", 36)
-            .attr("x", -65)
-            .attr("y", -18)
+            .attr("width", d => d._w || 130)
+            .attr("height", d => d._h || 36)
+            .attr("x", d => -((d._w || 130) / 2))
+            .attr("y", d => -((d._h || 36) / 2))
             .attr("rx", 8)
             .attr("class", d => `node-rect${d.isIsolated ? ' isolated' : ''}`)
             .attr("fill", d => d.dataset_meta.color + '20')
@@ -1004,42 +1058,21 @@ def generate_html(graph_data: dict) -> str:
 
         // --- 시뮬레이션 tick ---
         simulation.on("tick", () => {
-            link
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => {
-                    const dx = d.target.x - d.source.x;
-                    const dy = d.target.y - d.source.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    const isTable = d.target.type === 'table';
-                    const nodeWidth = isTable ? 130 : 120; // 테이블, 외부노드
-                    const nodeHeight = isTable ? 36 : 50;
-                    
-                    if (dist === 0) return d.target.x;
-
-                    // 노드 경계선에서 끝나도록 좌표 조정
-                    const ratio = Math.min(
-                        Math.abs(nodeWidth / 2 / dx),
-                        Math.abs(nodeHeight / 2 / dy)
-                    );
-                    return d.target.x - dx * ratio;
-                })
-                .attr("y2", d => {
-                    const dx = d.target.x - d.source.x;
-                    const dy = d.target.y - d.source.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    const isTable = d.target.type === 'table';
-                    const nodeWidth = isTable ? 130 : 120;
-                    const nodeHeight = isTable ? 36 : 50;
-
-                    if (dist === 0) return d.target.y;
-
-                    const ratio = Math.min(
-                        Math.abs(nodeWidth / 2 / dx),
-                        Math.abs(nodeHeight / 2 / dy)
-                    );
-                    return d.target.y - dy * ratio;
-                });
+            link.attr("d", d => {
+                const sx = d.source.x, sy = d.source.y;
+                const tx = d.target.x, ty = d.target.y;
+                const dx = tx - sx, dy = ty - sy;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist === 0) return '';
+                const nw = d.target._w || (d.target.type === 'table' ? 130 : 120);
+                const nh = d.target._h || (d.target.type === 'table' ? 36 : 50);
+                const r = Math.min(Math.abs(nw / 2 / dx), Math.abs(nh / 2 / dy));
+                const ex = tx - dx * r, ey = ty - dy * r;
+                if (!d._offset || d._parallel <= 1) return `M${sx},${sy} L${ex},${ey}`;
+                const cx = (sx + ex) / 2 + (dy / dist) * d._offset;
+                const cy = (sy + ey) / 2 - (dx / dist) * d._offset;
+                return `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`;
+            });
 
             node.attr("transform", d => `translate(${d.x}, ${d.y})`);
 
@@ -1132,17 +1165,18 @@ def generate_html(graph_data: dict) -> str:
         // --- 드래그 핸들러 ---
         function drag(simulation) {
             function dragstarted(event, d) {
+                if (d.type === 'external') return;
                 if (!event.active) simulation.alphaTarget(0.3).restart();
                 d.fx = d.x;
                 d.fy = d.y;
             }
             function dragged(event, d) {
+                if (d.type === 'external') return;
                 d.fx = event.x;
                 d.fy = event.y;
             }
             function dragended(event, d) {
                 if (!event.active) simulation.alphaTarget(0);
-                // 더블클릭으로 고정 해제하므로 여기선 fx,fy 유지
             }
             return d3.drag()
                 .on("start", dragstarted)
@@ -1150,6 +1184,7 @@ def generate_html(graph_data: dict) -> str:
                 .on("end", dragended);
         }
         node.on("dblclick", (event, d) => {
+            if (d.type === 'external') return;
             d.fx = null;
             d.fy = null;
         });
@@ -1161,39 +1196,71 @@ def generate_html(graph_data: dict) -> str:
 
         const allNodes = mainGroup.selectAll(".node");
         const allLinks = mainGroup.selectAll(".link");
+        let pinnedNode = null;
 
-        function handleMouseOver(event, d) {
+        function applyHighlight(d) {
             allNodes.classed("dimmed", true);
             allLinks.classed("dimmed", true);
-
-            d3.select(this).classed("dimmed", false).classed("highlighted", true);
-
             const connectedNodes = new Set([d.id]);
             validLinks.forEach(l => {
                 if (l.source.id === d.id) connectedNodes.add(l.target.id);
                 if (l.target.id === d.id) connectedNodes.add(l.source.id);
             });
-
-            allNodes.filter(n => connectedNodes.has(n.id))
-                .classed("dimmed", false)
-                .classed("highlighted", true);
-
-            allLinks.filter(l => (l.source.id === d.id || l.target.id === d.id))
-                .classed("dimmed", false)
-                .classed("highlighted", true);
+            allNodes.filter(n => connectedNodes.has(n.id)).classed("dimmed", false).classed("highlighted", true);
+            allLinks.filter(l => (l.source.id === d.id || l.target.id === d.id)).classed("dimmed", false).classed("highlighted", true);
         }
-        
-        function handleMouseOut() {
+
+        function clearHighlight() {
             allNodes.classed("dimmed", false).classed("highlighted", false);
             allLinks.classed("dimmed", false).classed("highlighted", false);
         }
 
+        function handleMouseOver(event, d) {
+            if (pinnedNode) return;
+            applyHighlight(d);
+        }
+
+        function handleMouseOut() {
+            if (pinnedNode) return;
+            clearHighlight();
+        }
+
         function handleClick(event, d) {
+            event.stopPropagation();
             updateSidePanel(d);
             document.getElementById('side-panel').classList.remove('hidden');
             document.getElementById('panel-toggle').classList.remove('panel-hidden');
             document.getElementById('panel-toggle').innerHTML = '&gt;';
+            if (pinnedNode && pinnedNode.id === d.id) {
+                pinnedNode = null;
+                clearHighlight();
+            } else {
+                pinnedNode = d;
+                applyHighlight(d);
+            }
         }
+
+        svg.on("click", () => {
+            if (pinnedNode) {
+                pinnedNode = null;
+                clearHighlight();
+            }
+        });
+
+        // --- 범례 ---
+        document.getElementById('legend-toggle').addEventListener('click', () => {
+            const body = document.getElementById('legend-body');
+            const arrow = document.getElementById('legend-arrow');
+            body.classList.toggle('open');
+            arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
+        });
+        const legendDs = document.getElementById('legend-datasets');
+        Object.values(graphData.datasets).forEach(ds => {
+            const item = document.createElement('div');
+            item.className = 'legend-item';
+            item.innerHTML = `<span class="l-dot" style="background:${ds.color};"></span>${ds.name_ko}`;
+            legendDs.appendChild(item);
+        });
 
         // --- 사이드 패널 ---
         const sidePanel = document.getElementById('side-panel');
