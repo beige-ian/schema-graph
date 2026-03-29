@@ -372,7 +372,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 11:15:40</span>
+        <span>Generated at: 2026-03-29 11:24:57</span>
     </footer>
 
     <script>
@@ -8022,117 +8022,117 @@
   ],
   "external_nodes": [
     {
-      "id": "ext_main_app",
+      "id": "external.ext_main_app",
       "type": "external",
-      "name": "Main App (AWS)",
+      "name_ko": "Main App (AWS)",
       "tier": 1,
+      "sync_type": "CDC",
       "sync_frequency": "real-time",
-      "sync_method": "CDC",
-      "direction": "inbound",
+      "sync_direction": "inbound",
       "connected_datasets": [
         "secure_dataset"
       ]
     },
     {
-      "id": "ext_mixpanel",
+      "id": "external.ext_mixpanel",
       "type": "external",
-      "name": "Mixpanel",
+      "name_ko": "Mixpanel",
       "tier": 1,
+      "sync_type": "Native BQ Connector",
       "sync_frequency": "real-time",
-      "sync_method": "Native BQ Connector",
-      "direction": "inbound",
+      "sync_direction": "inbound",
       "connected_datasets": [
         "mixpanel"
       ]
     },
     {
-      "id": "ext_supabase",
+      "id": "external.ext_supabase",
       "type": "external",
-      "name": "Supabase (covering-spot)",
+      "name_ko": "Supabase (covering-spot)",
       "tier": 1,
+      "sync_type": "GitHub Actions BQ Sync",
       "sync_frequency": "daily",
-      "sync_method": "GitHub Actions BQ Sync",
-      "direction": "inbound",
+      "sync_direction": "inbound",
       "connected_datasets": [
         "product",
         "spot"
       ]
     },
     {
-      "id": "ext_airbridge",
+      "id": "external.ext_airbridge",
       "type": "external",
-      "name": "Airbridge",
+      "name_ko": "Airbridge",
       "tier": 2,
+      "sync_type": "Apps Script",
       "sync_frequency": "daily",
-      "sync_method": "Apps Script",
-      "direction": "inbound",
+      "sync_direction": "inbound",
       "connected_datasets": [
         "airbridge_dataset",
         "ads_data"
       ]
     },
     {
-      "id": "ext_channel_talk",
+      "id": "external.ext_channel_talk",
       "type": "external",
-      "name": "Channel Talk",
+      "name_ko": "Channel Talk",
       "tier": 2,
+      "sync_type": "Apps Script",
       "sync_frequency": "trigger",
-      "sync_method": "Apps Script",
-      "direction": "inbound",
+      "sync_direction": "inbound",
       "connected_datasets": [
         "cx_data"
       ]
     },
     {
-      "id": "ext_google_sheets",
+      "id": "external.ext_google_sheets",
       "type": "external",
-      "name": "Google Sheets",
+      "name_ko": "Google Sheets",
       "tier": 2,
+      "sync_type": "Manual Upload",
       "sync_frequency": "manual",
-      "sync_method": "Manual Upload",
-      "direction": "inbound",
+      "sync_direction": "inbound",
       "connected_datasets": [
         "bag_delivery"
       ]
     },
     {
-      "id": "ext_flareline",
+      "id": "external.ext_flareline",
       "type": "external",
-      "name": "Flareline (CRM)",
+      "name_ko": "Flareline (CRM)",
       "tier": 3,
+      "sync_type": "Webhook",
       "sync_frequency": "event-driven",
-      "sync_method": "Webhook",
-      "direction": "outbound",
+      "sync_direction": "outbound",
       "connected_datasets": []
     },
     {
-      "id": "ext_slack",
+      "id": "external.ext_slack",
       "type": "external",
-      "name": "Slack",
+      "name_ko": "Slack",
       "tier": 3,
+      "sync_type": "Webhook/launchd",
       "sync_frequency": "event-driven",
-      "sync_method": "Webhook/launchd",
-      "direction": "outbound",
+      "sync_direction": "outbound",
       "connected_datasets": []
     },
     {
-      "id": "ext_notion",
+      "id": "external.ext_notion",
       "type": "external",
-      "name": "Notion",
+      "name_ko": "Notion",
       "tier": 3,
+      "sync_type": "API",
       "sync_frequency": "manual/cron",
-      "sync_method": "API",
-      "direction": "both",
+      "sync_direction": "both",
       "connected_datasets": []
     },
     {
-      "id": "ext_solapi",
+      "id": "external.ext_solapi",
       "type": "external",
-      "name": "Solapi (SMS)",
+      "name_ko": "Solapi (SMS)",
       "tier": 3,
+      "sync_type": "API",
       "sync_frequency": "event-driven",
-      "sync_method": "API",
-      "direction": "outbound",
+      "sync_direction": "outbound",
       "connected_datasets": []
     }
   ],
@@ -8418,7 +8418,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 11:15:40"
+  "generated_at": "2026-03-29 11:24:57"
 };
 
         // --- 초기 설정 ---
@@ -8428,23 +8428,41 @@
         const nodes = [...graphData.tables, ...graphData.external_nodes, ...graphData.dataset_nodes];
         const links = graphData.edges;
 
-        // 데이터셋 앵커를 원형으로 초기 배치 → 클러스터 분리 보장
+        // 데이터셋별 테이블 수 계산 → 각도 비례 배분
+        const dsTableCounts = new Map();
+        graphData.tables.forEach(t => {
+            dsTableCounts.set(t.dataset_id, (dsTableCounts.get(t.dataset_id) || 0) + 1);
+        });
         const dsNodes = graphData.dataset_nodes;
+        const totalTables = graphData.tables.length || 1;
         const clusterRadius = Math.min(width, height) * 0.35;
-        dsNodes.forEach((d, i) => {
-            const angle = (2 * Math.PI * i) / dsNodes.length - Math.PI / 2;
-            d.x = Math.cos(angle) * clusterRadius;
-            d.y = Math.sin(angle) * clusterRadius;
+
+        // 각 데이터셋에 테이블 수 비례 각도 할당 (최소 15° 보장)
+        const minAngle = Math.PI / 12; // 15°
+        const totalMinAngle = minAngle * dsNodes.length;
+        const remainAngle = 2 * Math.PI - totalMinAngle;
+
+        let currentAngle = -Math.PI / 2;
+        dsNodes.forEach((d) => {
+            const count = dsTableCounts.get(d.dataset_id) || 1;
+            const proportionalAngle = minAngle + remainAngle * (count / totalTables);
+            const midAngle = currentAngle + proportionalAngle / 2;
+            d.x = Math.cos(midAngle) * clusterRadius;
+            d.y = Math.sin(midAngle) * clusterRadius;
             d.fx = d.x;
             d.fy = d.y;
+            currentAngle += proportionalAngle;
         });
-        // 테이블 노드를 소속 앵커 근처에 초기 배치
+
+        // 테이블 노드를 소속 앵커 근처에 테이블 수 비례 반경으로 초기 배치
         const dsAnchorMap = new Map(dsNodes.map(d => [d.dataset_id, d]));
         graphData.tables.forEach(t => {
             const anchor = dsAnchorMap.get(t.dataset_id);
             if (anchor) {
-                t.x = anchor.x + (Math.random() - 0.5) * 150;
-                t.y = anchor.y + (Math.random() - 0.5) * 150;
+                const count = dsTableCounts.get(t.dataset_id) || 1;
+                const scatter = Math.min(60 + count * 8, 200);
+                t.x = anchor.x + (Math.random() - 0.5) * scatter;
+                t.y = anchor.y + (Math.random() - 0.5) * scatter;
             }
         });
 
@@ -8494,11 +8512,11 @@
             .attr("fill", "rgba(255,255,255,0.5)");
 
         const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(120))
-            .force("charge", d3.forceManyBody().strength(-300))
+            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-250))
             .force("center", d3.forceCenter(0, 0))
             .force("cluster", forceCluster()) // 커스텀 클러스터 force
-            .force("collide", d3.forceCollide().radius(50));
+            .force("collide", d3.forceCollide().radius(40));
 
         // --- 요소 렌더링 ---
         const link = mainGroup.append("g")

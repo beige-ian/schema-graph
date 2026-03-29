@@ -138,7 +138,12 @@ def build_graph_data(bq_schemas: dict) -> dict:
         node_data = {
             "id": f"external.{system_id}",
             "type": "external",
-            **system_info
+            "name_ko": system_info.get("name", system_id),
+            "tier": system_info.get("tier"),
+            "sync_type": system_info.get("sync_method"),
+            "sync_frequency": system_info.get("sync_frequency"),
+            "sync_direction": system_info.get("direction"),
+            "connected_datasets": system_info.get("connected_datasets", []),
         }
         external_nodes.append(node_data)
 
@@ -629,23 +634,41 @@ def generate_html(graph_data: dict) -> str:
         const nodes = [...graphData.tables, ...graphData.external_nodes, ...graphData.dataset_nodes];
         const links = graphData.edges;
 
-        // 데이터셋 앵커를 원형으로 초기 배치 → 클러스터 분리 보장
+        // 데이터셋별 테이블 수 계산 → 각도 비례 배분
+        const dsTableCounts = new Map();
+        graphData.tables.forEach(t => {
+            dsTableCounts.set(t.dataset_id, (dsTableCounts.get(t.dataset_id) || 0) + 1);
+        });
         const dsNodes = graphData.dataset_nodes;
+        const totalTables = graphData.tables.length || 1;
         const clusterRadius = Math.min(width, height) * 0.35;
-        dsNodes.forEach((d, i) => {
-            const angle = (2 * Math.PI * i) / dsNodes.length - Math.PI / 2;
-            d.x = Math.cos(angle) * clusterRadius;
-            d.y = Math.sin(angle) * clusterRadius;
+
+        // 각 데이터셋에 테이블 수 비례 각도 할당 (최소 15° 보장)
+        const minAngle = Math.PI / 12; // 15°
+        const totalMinAngle = minAngle * dsNodes.length;
+        const remainAngle = 2 * Math.PI - totalMinAngle;
+
+        let currentAngle = -Math.PI / 2;
+        dsNodes.forEach((d) => {
+            const count = dsTableCounts.get(d.dataset_id) || 1;
+            const proportionalAngle = minAngle + remainAngle * (count / totalTables);
+            const midAngle = currentAngle + proportionalAngle / 2;
+            d.x = Math.cos(midAngle) * clusterRadius;
+            d.y = Math.sin(midAngle) * clusterRadius;
             d.fx = d.x;
             d.fy = d.y;
+            currentAngle += proportionalAngle;
         });
-        // 테이블 노드를 소속 앵커 근처에 초기 배치
+
+        // 테이블 노드를 소속 앵커 근처에 테이블 수 비례 반경으로 초기 배치
         const dsAnchorMap = new Map(dsNodes.map(d => [d.dataset_id, d]));
         graphData.tables.forEach(t => {
             const anchor = dsAnchorMap.get(t.dataset_id);
             if (anchor) {
-                t.x = anchor.x + (Math.random() - 0.5) * 150;
-                t.y = anchor.y + (Math.random() - 0.5) * 150;
+                const count = dsTableCounts.get(t.dataset_id) || 1;
+                const scatter = Math.min(60 + count * 8, 200);
+                t.x = anchor.x + (Math.random() - 0.5) * scatter;
+                t.y = anchor.y + (Math.random() - 0.5) * scatter;
             }
         });
 
@@ -695,11 +718,11 @@ def generate_html(graph_data: dict) -> str:
             .attr("fill", "rgba(255,255,255,0.5)");
 
         const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(120))
-            .force("charge", d3.forceManyBody().strength(-300))
+            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-250))
             .force("center", d3.forceCenter(0, 0))
             .force("cluster", forceCluster()) // 커스텀 클러스터 force
-            .force("collide", d3.forceCollide().radius(50));
+            .force("collide", d3.forceCollide().radius(40));
 
         // --- 요소 렌더링 ---
         const link = mainGroup.append("g")
