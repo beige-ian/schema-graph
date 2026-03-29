@@ -192,7 +192,7 @@ def build_graph_data(bq_schemas: dict) -> dict:
         if edge_tuple not in edge_set:
             source_is_external = source_id.startswith("external.")
             target_is_external = target_id.startswith("external.")
-            
+
             edge_type = "external"
             if not source_is_external and not target_is_external:
                 source_dataset = table_map.get(source_id, {}).get('dataset_id')
@@ -200,13 +200,56 @@ def build_graph_data(bq_schemas: dict) -> dict:
                 if source_dataset and target_dataset:
                     edge_type = "internal" if source_dataset == target_dataset else "cross-dataset"
 
+            desc = edge.get('description', '')
+            if not desc and edge.get('source_col') and edge.get('target_col'):
+                desc = f"{edge['source_col']} → {edge['target_col']}"
+            if edge.get('note'):
+                desc += f" ({edge['note']})"
+
             edges.append({
                 "source": source_id,
                 "target": target_id,
                 "type": edge_type,
-                "description": edge.get('description', '')
+                "description": desc,
+                "rel": edge.get('rel', ''),
+                "source_col": edge.get('source_col', ''),
+                "target_col": edge.get('target_col', ''),
             })
             edge_set.add(edge_tuple)
+
+    # _id 컬럼 패턴으로 관계 자동 감지
+    all_table_by_name = {}
+    for t in tables:
+        tname = t['table_id']
+        if tname not in all_table_by_name:
+            all_table_by_name[tname] = t['id']
+
+    for table_node in tables:
+        for column in table_node['columns']:
+            col_name = column['name']
+            if not col_name.endswith('_id') or col_name == 'id':
+                continue
+            target_table_name = col_name[:-3]  # _id 제거
+            # 같은 데이터셋 우선 매칭
+            candidate = f"{table_node['dataset_id']}.{target_table_name}"
+            if candidate not in table_map:
+                candidate = all_table_by_name.get(target_table_name)
+            if not candidate or candidate not in table_map or candidate == table_node['id']:
+                continue
+            edge_tuple = tuple(sorted((table_node['id'], candidate)))
+            if edge_tuple not in edge_set:
+                src_ds = table_node['dataset_id']
+                tgt_ds = table_map[candidate]['dataset_id']
+                edges.append({
+                    "source": table_node['id'],
+                    "target": candidate,
+                    "type": "internal" if src_ds == tgt_ds else "cross-dataset",
+                    "description": f"{col_name} → {target_table_name}.id",
+                    "rel": "N:1",
+                    "source_col": col_name,
+                    "target_col": "id",
+                })
+                edge_set.add(edge_tuple)
 
     print(f"성공: 테이블 {len(tables)}개, 외부 시스템 {len(external_nodes)}개, 관계 {len(edges)}개 데이터 생성.")
     
@@ -732,6 +775,8 @@ def generate_html(graph_data: dict) -> str:
             .join("line")
             .attr("class", d => `link ${d.type}`)
             .attr("marker-end", "url(#end)");
+
+        link.append("title").text(d => [d.rel, d.description].filter(Boolean).join(' | '));
 
         const node = mainGroup.append("g")
             .attr("class", "nodes")
