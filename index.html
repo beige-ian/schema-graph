@@ -106,6 +106,7 @@
             display: flex;
             flex-grow: 1;
             position: relative;
+            overflow: hidden;
         }
         .canvas-container {
             flex-grow: 1;
@@ -363,7 +364,7 @@
         }
         .login-box button:hover { opacity: 0.9; }
         .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
-        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--card-color); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: right 0.3s ease; }
         .legend-toggle { width: 100%; padding: 8px 12px; background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 13px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
         .legend-body { padding: 4px 12px 10px; display: none; }
         .legend-body.open { display: block; }
@@ -9267,7 +9268,7 @@
             .join("text")
             .attr("class", "dataset-label")
             .style("fill", d => d.color)
-            .text(d => d.name_ko);
+            .text(d => d.label_ko);
 
         // --- 줌/팬 설정 ---
         const zoom = d3.zoom()
@@ -9463,6 +9464,7 @@
             document.getElementById('side-panel').classList.remove('hidden');
             document.getElementById('panel-toggle').classList.remove('panel-hidden');
             document.getElementById('panel-toggle').innerHTML = '&gt;';
+            document.getElementById('legend-panel').style.right = 'calc(var(--sidepanel-width) + 12px)';
             if (pinnedNode && pinnedNode.id === d.id) {
                 pinnedNode = null;
                 clearHighlight();
@@ -9497,11 +9499,18 @@
         // --- 사이드 패널 ---
         const sidePanel = document.getElementById('side-panel');
         const panelToggle = document.getElementById('panel-toggle');
-        
+        const legendPanel = document.getElementById('legend-panel');
+
+        function updateLegendPosition() {
+            const isHidden = sidePanel.classList.contains('hidden');
+            legendPanel.style.right = isHidden ? '12px' : 'calc(var(--sidepanel-width) + 12px)';
+        }
+
         panelToggle.addEventListener('click', () => {
             sidePanel.classList.toggle('hidden');
             panelToggle.classList.toggle('panel-hidden');
             panelToggle.innerHTML = sidePanel.classList.contains('hidden') ? '&lt;' : '&gt;';
+            updateLegendPosition();
         });
         
         function updateSidePanel(d) {

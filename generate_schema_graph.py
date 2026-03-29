@@ -394,6 +394,7 @@ def generate_html(graph_data: dict) -> str:
             display: flex;
             flex-grow: 1;
             position: relative;
+            overflow: hidden;
         }
         .canvas-container {
             flex-grow: 1;
@@ -651,7 +652,7 @@ def generate_html(graph_data: dict) -> str:
         }
         .login-box button:hover { opacity: 0.9; }
         .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
-        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--card-color); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: right 0.3s ease; }
         .legend-toggle { width: 100%; padding: 8px 12px; background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 13px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
         .legend-body { padding: 4px 12px 10px; display: none; }
         .legend-body.open { display: block; }
@@ -1036,7 +1037,7 @@ def generate_html(graph_data: dict) -> str:
             .join("text")
             .attr("class", "dataset-label")
             .style("fill", d => d.color)
-            .text(d => d.name_ko);
+            .text(d => d.label_ko);
 
         // --- 줌/팬 설정 ---
         const zoom = d3.zoom()
@@ -1236,6 +1237,7 @@ def generate_html(graph_data: dict) -> str:
             document.getElementById('side-panel').classList.remove('hidden');
             document.getElementById('panel-toggle').classList.remove('panel-hidden');
             document.getElementById('panel-toggle').innerHTML = '&gt;';
+            document.getElementById('legend-panel').style.right = 'calc(var(--sidepanel-width) + 12px)';
             if (pinnedNode && pinnedNode.id === d.id) {
                 pinnedNode = null;
                 clearHighlight();
@@ -1263,18 +1265,25 @@ def generate_html(graph_data: dict) -> str:
         Object.values(graphData.datasets).forEach(ds => {
             const item = document.createElement('div');
             item.className = 'legend-item';
-            item.innerHTML = `<span class="l-dot" style="background:${ds.color};"></span>${ds.name_ko}`;
+            item.innerHTML = `<span class="l-dot" style="background:${ds.color};"></span>${ds.label_ko}`;
             legendDs.appendChild(item);
         });
 
         // --- 사이드 패널 ---
         const sidePanel = document.getElementById('side-panel');
         const panelToggle = document.getElementById('panel-toggle');
-        
+        const legendPanel = document.getElementById('legend-panel');
+
+        function updateLegendPosition() {
+            const isHidden = sidePanel.classList.contains('hidden');
+            legendPanel.style.right = isHidden ? '12px' : 'calc(var(--sidepanel-width) + 12px)';
+        }
+
         panelToggle.addEventListener('click', () => {
             sidePanel.classList.toggle('hidden');
             panelToggle.classList.toggle('panel-hidden');
             panelToggle.innerHTML = sidePanel.classList.contains('hidden') ? '&lt;' : '&gt;';
+            updateLegendPosition();
         });
         
         function updateSidePanel(d) {
@@ -1286,7 +1295,7 @@ def generate_html(graph_data: dict) -> str:
             let content = '';
             if (d.type === 'table') {
                 const dsMeta = d.dataset_meta;
-                const badge = `<span class="badge" style="background-color: ${dsMeta.color};">${dsMeta.name_ko}</span>`;
+                const badge = `<span class="badge" style="background-color: ${dsMeta.color};">${dsMeta.label_ko}</span>`;
                 const connectedLinks = validLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
 
                 content = `
@@ -1349,7 +1358,7 @@ def generate_html(graph_data: dict) -> str:
                         <div class="enum-pills">
                             ${[...connectedDatasets].filter(dsId => dsId && graphData.datasets[dsId]).map(dsId => {
                                 const dsMeta = graphData.datasets[dsId];
-                                return `<span class="badge" style="background-color: ${dsMeta.color}; cursor: pointer;" onclick="toggleDatasetFilter('${dsId}', true)">${dsMeta.name_ko}</span>`;
+                                return `<span class="badge" style="background-color: ${dsMeta.color}; cursor: pointer;" onclick="toggleDatasetFilter('${dsId}', true)">${dsMeta.label_ko}</span>`;
                             }).join('')}
                         </div>
                     </div>
@@ -1424,7 +1433,7 @@ def generate_html(graph_data: dict) -> str:
         Object.entries(graphData.datasets).forEach(([id, meta]) => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn active';
-            btn.textContent = meta.name_ko;
+            btn.textContent = meta.label_ko;
             btn.dataset.filter = id;
             btn.style.setProperty('--color', meta.color);
             btn.style.setProperty('--color-bg', meta.color + '40');
