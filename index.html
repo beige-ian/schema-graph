@@ -106,6 +106,7 @@
             display: flex;
             flex-grow: 1;
             position: relative;
+            overflow: hidden;
         }
         .canvas-container {
             flex-grow: 1;
@@ -363,7 +364,7 @@
         }
         .login-box button:hover { opacity: 0.9; }
         .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
-        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--card-color); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: right 0.3s ease; }
         .legend-toggle { width: 100%; padding: 8px 12px; background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 13px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
         .legend-body { padding: 4px 12px 10px; display: none; }
         .legend-body.open { display: block; }
@@ -432,7 +433,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 10:29:38</span>
+        <span>Generated at: 2026-03-29 22:19:09</span>
     </footer>
 
     <script>
@@ -4510,11 +4511,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_svNRKVid0T",
+      "id": "mixpanel.mp_identity_mappings_data_R2XH9ucMtl",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_svNRKVid0T",
-      "name_ko": "mp_identity_mappings_data_svNRKVid0T",
+      "table_id": "mp_identity_mappings_data_R2XH9ucMtl",
+      "name_ko": "mp_identity_mappings_data_R2XH9ucMtl",
       "description": "",
       "columns": [
         {
@@ -4539,11 +4540,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_tNUi1DziPd",
+      "id": "mixpanel.mp_identity_mappings_data_YUJtTdy8M1",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_tNUi1DziPd",
-      "name_ko": "mp_identity_mappings_data_tNUi1DziPd",
+      "table_id": "mp_identity_mappings_data_YUJtTdy8M1",
+      "name_ko": "mp_identity_mappings_data_YUJtTdy8M1",
       "description": "",
       "columns": [
         {
@@ -4705,40 +4706,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_bLy8Iu50t1",
+      "id": "mixpanel.mp_people_data_BOrgquG2Ye",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_bLy8Iu50t1",
-      "name_ko": "mp_people_data_bLy8Iu50t1",
-      "description": "",
-      "columns": [
-        {
-          "name": "properties",
-          "type": "JSON",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_people_data_vS0mD9Rcyf",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_vS0mD9Rcyf",
-      "name_ko": "mp_people_data_vS0mD9Rcyf",
+      "table_id": "mp_people_data_BOrgquG2Ye",
+      "name_ko": "mp_people_data_BOrgquG2Ye",
       "description": "",
       "columns": [
         {
@@ -4769,6 +4741,35 @@
       "table_id": "mp_people_data_view",
       "name_ko": "mp_people_data_view",
       "description": "Mixpanel 사용자 속성 데이터",
+      "columns": [
+        {
+          "name": "properties",
+          "type": "JSON",
+          "nullable": true
+        },
+        {
+          "name": "distinct_id",
+          "type": "STRING",
+          "nullable": true
+        }
+      ],
+      "column_count": 2,
+      "dataset_meta": {
+        "id": "mixpanel",
+        "label_ko": "Mixpanel 이벤트",
+        "source_system": "Mixpanel native connector",
+        "sync_frequency": "real-time",
+        "color": "#a855f7",
+        "tier": 1
+      }
+    },
+    {
+      "id": "mixpanel.mp_people_data_wuM3BHFrJC",
+      "type": "table",
+      "dataset_id": "mixpanel",
+      "table_id": "mp_people_data_wuM3BHFrJC",
+      "name_ko": "mp_people_data_wuM3BHFrJC",
+      "description": "",
       "columns": [
         {
           "name": "properties",
@@ -8949,7 +8950,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 10:29:38"
+  "generated_at": "2026-03-29 22:19:09"
 };
 
         // --- 초기 설정 ---
@@ -9238,7 +9239,7 @@
             .join("text")
             .attr("class", "dataset-label")
             .style("fill", d => d.color)
-            .text(d => d.name_ko);
+            .text(d => d.label_ko);
 
         // --- 줌/팬 설정 ---
         const zoom = d3.zoom()
@@ -9246,6 +9247,7 @@
             .on("zoom", zoomed);
         
         svg.call(zoom);
+        svg.on("dblclick.zoom", null);
 
         function zoomed({transform}) {
             mainGroup.attr("transform", transform);
@@ -9389,6 +9391,7 @@
                 .on("end", dragended);
         }
         node.on("dblclick", (event, d) => {
+            event.stopPropagation();
             if (d.type === 'external') return;
             d.fx = null;
             d.fy = null;
@@ -9431,11 +9434,12 @@
         }
 
         function handleClick(event, d) {
-            event.stopPropagation();
+            if (event) event.stopPropagation();
             updateSidePanel(d);
             document.getElementById('side-panel').classList.remove('hidden');
             document.getElementById('panel-toggle').classList.remove('panel-hidden');
             document.getElementById('panel-toggle').innerHTML = '&gt;';
+            document.getElementById('legend-panel').style.right = 'calc(var(--sidepanel-width) + 12px)';
             if (pinnedNode && pinnedNode.id === d.id) {
                 pinnedNode = null;
                 clearHighlight();
@@ -9463,18 +9467,25 @@
         Object.values(graphData.datasets).forEach(ds => {
             const item = document.createElement('div');
             item.className = 'legend-item';
-            item.innerHTML = `<span class="l-dot" style="background:${ds.color};"></span>${ds.name_ko}`;
+            item.innerHTML = `<span class="l-dot" style="background:${ds.color};"></span>${ds.label_ko}`;
             legendDs.appendChild(item);
         });
 
         // --- 사이드 패널 ---
         const sidePanel = document.getElementById('side-panel');
         const panelToggle = document.getElementById('panel-toggle');
-        
+        const legendPanel = document.getElementById('legend-panel');
+
+        function updateLegendPosition() {
+            const isHidden = sidePanel.classList.contains('hidden');
+            legendPanel.style.right = isHidden ? '12px' : 'calc(var(--sidepanel-width) + 12px)';
+        }
+
         panelToggle.addEventListener('click', () => {
             sidePanel.classList.toggle('hidden');
             panelToggle.classList.toggle('panel-hidden');
             panelToggle.innerHTML = sidePanel.classList.contains('hidden') ? '&lt;' : '&gt;';
+            updateLegendPosition();
         });
         
         function updateSidePanel(d) {
@@ -9486,7 +9497,7 @@
             let content = '';
             if (d.type === 'table') {
                 const dsMeta = d.dataset_meta;
-                const badge = `<span class="badge" style="background-color: ${dsMeta.color};">${dsMeta.name_ko}</span>`;
+                const badge = `<span class="badge" style="background-color: ${dsMeta.color};">${dsMeta.label_ko}</span>`;
                 const connectedLinks = validLinks.filter(l => l.source.id === d.id || l.target.id === d.id);
 
                 content = `
@@ -9549,7 +9560,7 @@
                         <div class="enum-pills">
                             ${[...connectedDatasets].filter(dsId => dsId && graphData.datasets[dsId]).map(dsId => {
                                 const dsMeta = graphData.datasets[dsId];
-                                return `<span class="badge" style="background-color: ${dsMeta.color}; cursor: pointer;" onclick="toggleDatasetFilter('${dsId}', true)">${dsMeta.name_ko}</span>`;
+                                return `<span class="badge" style="background-color: ${dsMeta.color}; cursor: pointer;" onclick="toggleDatasetFilter('${dsId}', true)">${dsMeta.label_ko}</span>`;
                             }).join('')}
                         </div>
                     </div>
@@ -9624,7 +9635,7 @@
         Object.entries(graphData.datasets).forEach(([id, meta]) => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn active';
-            btn.textContent = meta.name_ko;
+            btn.textContent = meta.label_ko;
             btn.dataset.filter = id;
             btn.style.setProperty('--color', meta.color);
             btn.style.setProperty('--color-bg', meta.color + '40');
