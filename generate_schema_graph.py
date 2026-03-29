@@ -1100,8 +1100,22 @@ def generate_html(graph_data: dict) -> str:
             try {
                 const visibleNodes = nodes.filter(n => n.type === 'table');
                 if (!visibleNodes.length) return;
+
+                // IQR 기반 outlier 제거 — 메인 클러스터에 포커스
+                const sorted = (arr) => [...arr].sort((a, b) => a - b);
+                const q = (arr, p) => arr[Math.floor(arr.length * p)];
+                const xs = sorted(visibleNodes.map(n => n.x));
+                const ys = sorted(visibleNodes.map(n => n.y));
+                const xQ1 = q(xs, 0.25), xQ3 = q(xs, 0.75), xIQR = xQ3 - xQ1;
+                const yQ1 = q(ys, 0.25), yQ3 = q(ys, 0.75), yIQR = yQ3 - yQ1;
+                const coreNodes = visibleNodes.filter(n =>
+                    n.x >= xQ1 - 1.5 * xIQR && n.x <= xQ3 + 1.5 * xIQR &&
+                    n.y >= yQ1 - 1.5 * yIQR && n.y <= yQ3 + 1.5 * yIQR
+                );
+                const fitNodes = coreNodes.length > 0 ? coreNodes : visibleNodes;
+
                 let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-                visibleNodes.forEach(n => {
+                fitNodes.forEach(n => {
                     minX = Math.min(minX, n.x - 70);
                     maxX = Math.max(maxX, n.x + 70);
                     minY = Math.min(minY, n.y - 25);
