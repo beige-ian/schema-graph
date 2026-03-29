@@ -1044,6 +1044,7 @@ def generate_html(graph_data: dict) -> str:
             .on("zoom", zoomed);
         
         svg.call(zoom);
+        svg.on("dblclick.zoom", null);
 
         function zoomed({transform}) {
             mainGroup.attr("transform", transform);
@@ -1187,6 +1188,7 @@ def generate_html(graph_data: dict) -> str:
                 .on("end", dragended);
         }
         node.on("dblclick", (event, d) => {
+            event.stopPropagation();
             if (d.type === 'external') return;
             d.fx = null;
             d.fy = null;
@@ -1229,7 +1231,7 @@ def generate_html(graph_data: dict) -> str:
         }
 
         function handleClick(event, d) {
-            event.stopPropagation();
+            if (event) event.stopPropagation();
             updateSidePanel(d);
             document.getElementById('side-panel').classList.remove('hidden');
             document.getElementById('panel-toggle').classList.remove('panel-hidden');
