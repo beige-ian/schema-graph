@@ -627,9 +627,41 @@ def generate_html(graph_data: dict) -> str:
         .zoom-controls button:last-child { border-radius: 0 0 4px 4px; }
         .zoom-controls button:hover { background-color: #2a2a2f; }
 
+        #login-overlay {
+            position: fixed; inset: 0; background: var(--bg-color);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+        }
+        #login-overlay.hidden { display: none; }
+        .login-box {
+            background: var(--card-color); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 40px 36px 32px; width: 320px; text-align: center;
+        }
+        .login-box h2 { font-size: 20px; font-weight: 600; margin: 0 0 24px; color: var(--text-color); }
+        .login-box input {
+            width: 100%; box-sizing: border-box; padding: 10px 12px; margin-bottom: 12px;
+            border: 1px solid var(--border-color); border-radius: 6px;
+            background: var(--bg-color); color: var(--text-color); font-size: 14px; outline: none;
+        }
+        .login-box input:focus { border-color: var(--accent-color); }
+        .login-box button {
+            width: 100%; padding: 10px; border: none; border-radius: 6px;
+            background: var(--accent-color); color: #fff; font-size: 14px; cursor: pointer; margin-top: 4px;
+        }
+        .login-box button:hover { opacity: 0.9; }
+        .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
+
     </style>
 </head>
 <body>
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>Schema Graph</h2>
+            <input type="text" id="login-id" placeholder="ID" autocomplete="username">
+            <input type="password" id="login-pw" placeholder="Password" autocomplete="current-password">
+            <button id="login-btn">로그인</button>
+            <div class="login-error" id="login-error">아이디 또는 비밀번호가 틀립니다.</div>
+        </div>
+    </div>
     <header>
         <h1>BigQuery 스키마 관계도</h1>
         <div class="controls">
@@ -667,6 +699,26 @@ def generate_html(graph_data: dict) -> str:
     </footer>
 
     <script>
+        // --- 인증 ---
+        (function() {
+            if (sessionStorage.getItem('schema_auth') === '1') {
+                document.getElementById('login-overlay').classList.add('hidden');
+                return;
+            }
+            const doLogin = () => {
+                const id = document.getElementById('login-id').value;
+                const pw = document.getElementById('login-pw').value;
+                if (id === 'covering_schema' && pw === 'covering_schema') {
+                    sessionStorage.setItem('schema_auth', '1');
+                    document.getElementById('login-overlay').classList.add('hidden');
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            };
+            document.getElementById('login-btn').addEventListener('click', doLogin);
+            document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+        })();
+
         // --- 인라인 D3.js v7 라이브러리 ---
         __D3_SCRIPT__
         // ------------------------------------
