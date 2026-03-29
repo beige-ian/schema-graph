@@ -284,7 +284,10 @@
         .node.dimmed, .link.dimmed { opacity: 0.1; }
         .node.highlighted .node-rect { stroke-width: 3px; }
         .link.highlighted { stroke-opacity: 1; stroke-width: 2.5px; }
-        
+        .node .node-rect.isolated { stroke-dasharray: 4 3; stroke-opacity: 0.5; fill-opacity: 0.5; }
+        .node.isolated-node .node-label { fill-opacity: 0.6; }
+        .dataset-hull { pointer-events: none; transition: opacity 0.3s; }
+
         .dataset-label {
             font-size: 16px;
             font-weight: bold;
@@ -372,7 +375,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 11:40:21</span>
+        <span>Generated at: 2026-03-29 11:55:35</span>
     </footer>
 
     <script>
@@ -8898,7 +8901,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 11:40:21"
+  "generated_at": "2026-03-29 11:55:35"
 };
 
         // --- 초기 설정 ---
@@ -8915,7 +8918,7 @@
         });
         const dsNodes = graphData.dataset_nodes;
         const totalTables = graphData.tables.length || 1;
-        const clusterRadius = Math.min(width, height) * 0.35;
+        const clusterRadius = Math.min(width, height) * 0.45;
 
         // 각 데이터셋에 테이블 수 비례 각도 할당 (최소 15° 보장)
         const minAngle = Math.PI / 12; // 15°
@@ -8940,9 +8943,49 @@
             const anchor = dsAnchorMap.get(t.dataset_id);
             if (anchor) {
                 const count = dsTableCounts.get(t.dataset_id) || 1;
-                const scatter = Math.min(60 + count * 8, 200);
-                t.x = anchor.x + (Math.random() - 0.5) * scatter;
-                t.y = anchor.y + (Math.random() - 0.5) * scatter;
+                const scatter = Math.min(80 + Math.sqrt(count) * 55, 600);
+                if (t.isIsolated) {
+                    // 관계 없는 테이블은 클러스터 외곽 호(arc)에 배치
+                    const isolatedInDs = graphData.tables.filter(n => n.isIsolated && n.dataset_id === t.dataset_id);
+                    const idx = isolatedInDs.indexOf(t);
+                    const total = isolatedInDs.length;
+                    const arcAngle = Math.atan2(anchor.fy || anchor.y, anchor.fx || anchor.x);
+                    const startAngle = arcAngle - Math.PI / 6;
+                    const angle = startAngle + (Math.PI / 3) * (idx / Math.max(total - 1, 1));
+                    t.x = (anchor.fx || anchor.x) + Math.cos(angle) * scatter * 0.85;
+                    t.y = (anchor.fy || anchor.y) + Math.sin(angle) * scatter * 0.85;
+                } else {
+                    t.x = (anchor.fx || anchor.x) + (Math.random() - 0.5) * scatter;
+                    t.y = (anchor.fy || anchor.y) + (Math.random() - 0.5) * scatter;
+                }
+            }
+        });
+
+        // 외부 시스템 초기 배치: 연결된 데이터셋 앵커 평균 위치 바깥쪽
+        const isolatedExternals = graphData.external_nodes.filter(e => (e.connected_datasets || []).length === 0);
+        graphData.external_nodes.forEach(ext => {
+            const connDs = ext.connected_datasets || [];
+            if (connDs.length > 0) {
+                let avgX = 0, avgY = 0, cnt = 0;
+                connDs.forEach(dsId => {
+                    const anchor = dsAnchorMap.get(dsId);
+                    if (anchor) { avgX += (anchor.fx || anchor.x); avgY += (anchor.fy || anchor.y); cnt++; }
+                });
+                if (cnt > 0) {
+                    avgX /= cnt; avgY /= cnt;
+                    const angle = Math.atan2(avgY, avgX);
+                    const dist = Math.sqrt(avgX * avgX + avgY * avgY);
+                    ext.x = avgX + Math.cos(angle) * Math.max(130, dist * 0.4);
+                    ext.y = avgY + Math.sin(angle) * Math.max(130, dist * 0.4);
+                }
+            } else {
+                // 연결 데이터셋 없는 외부 시스템: 외곽 원 균등 배치
+                const idx = isolatedExternals.indexOf(ext);
+                const total = isolatedExternals.length;
+                const angle = -Math.PI / 2 + (2 * Math.PI * idx / Math.max(total, 1));
+                const outerRadius = clusterRadius * 1.6;
+                ext.x = Math.cos(angle) * outerRadius;
+                ext.y = Math.sin(angle) * outerRadius;
             }
         });
 
@@ -8957,6 +9000,14 @@
             link.target = nodeMap.get(link.target);
             return link.source && link.target;
         });
+
+        // 관계 없는 테이블 감지
+        const connectedNodeIds = new Set();
+        validLinks.forEach(l => {
+            connectedNodeIds.add(l.source.id || l.source);
+            connectedNodeIds.add(l.target.id || l.target);
+        });
+        graphData.tables.forEach(t => { t.isIsolated = !connectedNodeIds.has(t.id); });
 
         const tierColors = {
             1: 'var(--tier1-color)',
@@ -8992,13 +9043,61 @@
             .attr("fill", "rgba(255,255,255,0.5)");
 
         const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(validLinks).id(d => d.id).distance(100))
-            .force("charge", d3.forceManyBody().strength(-250))
-            .force("center", d3.forceCenter(0, 0))
-            .force("cluster", forceCluster()) // 커스텀 클러스터 force
-            .force("collide", d3.forceCollide().radius(40));
+            .force("link", d3.forceLink(validLinks).id(d => d.id)
+                .distance(d => d.type === 'cross-dataset' ? 200 : (d.type === 'external' ? 160 : 100))
+                .strength(d => d.type === 'cross-dataset' ? 0.3 : 0.7))
+            .force("charge", d3.forceManyBody().strength(d => {
+                if (d.type === 'dataset') return 0;
+                if (d.type === 'external') return -150;
+                return -350;
+            }))
+            .force("x", d3.forceX(0).strength(0.01))
+            .force("y", d3.forceY(0).strength(0.01))
+            .force("cluster", forceCluster())
+            .force("collide", d3.forceCollide().radius(d => {
+                if (d.type === 'table') return 75;
+                if (d.type === 'external') return 70;
+                return 0;
+            }).strength(0.8))
+            .alphaDecay(0.02)
+            .velocityDecay(0.3);
 
         // --- 요소 렌더링 ---
+        // 데이터셋 경계 Hull (링크·노드 아래 레이어)
+        const hullGroup = mainGroup.append("g").attr("class", "hulls");
+        const hullPaths = hullGroup.selectAll("path")
+            .data(graphData.dataset_nodes)
+            .join("path")
+            .attr("class", "dataset-hull")
+            .attr("fill", d => d.color + "10")
+            .attr("stroke", d => d.color + "30")
+            .attr("stroke-width", 1.5)
+            .attr("stroke-linejoin", "round");
+
+        function updateHulls() {
+            hullPaths.attr("d", d => {
+                const clusterNodes = nodes.filter(n => n.type === 'table' && n.dataset_id === d.dataset_id);
+                if (clusterNodes.length === 0) return null;
+                if (clusterNodes.length === 1) {
+                    const n = clusterNodes[0];
+                    const pad = 35;
+                    return `M${n.x - pad},${n.y - pad}L${n.x + pad},${n.y - pad}L${n.x + pad},${n.y + pad}L${n.x - pad},${n.y + pad}Z`;
+                }
+                const points = clusterNodes.map(n => [n.x, n.y]);
+                const hull = d3.polygonHull(points);
+                if (!hull) return null;
+                const centroid = d3.polygonCentroid(hull);
+                const pad = 45;
+                const expanded = hull.map(p => {
+                    const dx = p[0] - centroid[0];
+                    const dy = p[1] - centroid[1];
+                    const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                    return [p[0] + dx / dist * pad, p[1] + dy / dist * pad];
+                });
+                return d3.line().curve(d3.curveCatmullRomClosed.alpha(0.8))(expanded);
+            });
+        }
+
         const link = mainGroup.append("g")
             .attr("class", "links")
             .selectAll("line")
@@ -9024,8 +9123,8 @@
             .attr("x", -65)
             .attr("y", -18)
             .attr("rx", 8)
-            .attr("class", "node-rect")
-            .attr("fill", d => d.dataset_meta.color + '20') // 20은 투명도
+            .attr("class", d => `node-rect${d.isIsolated ? ' isolated' : ''}`)
+            .attr("fill", d => d.dataset_meta.color + '20')
             .attr("stroke", d => d.dataset_meta.color);
 
         // 외부 시스템 노드 (polygon, 다이아몬드)
@@ -9075,10 +9174,11 @@
             mainGroup.attr("transform", transform);
             updateMinimapViewRect(transform);
 
-            // 시맨틱 줌
             const k = transform.k;
             node.select(".node-label-cols").style("display", k > 1.0 ? "inline" : "none");
-            datasetLabels.style("opacity", k < 0.4 ? 0.7 : 0);
+            datasetLabels.style("opacity", k < 0.7 ? Math.min(0.85, (0.7 - k) / 0.3 + 0.1) : 0);
+            hullPaths.style("opacity", Math.max(0.4, Math.min(1.0, 1.5 - k)));
+            node.selectAll(".node-label").style("display", k < 0.2 ? "none" : null);
         }
 
         // --- 시뮬레이션 tick ---
@@ -9121,28 +9221,83 @@
                 });
 
             node.attr("transform", d => `translate(${d.x}, ${d.y})`);
-            
+
             datasetLabels
-                .attr("x", d => d.x)
-                .attr("y", d => d.y);
+                .attr("x", d => {
+                    const ns = nodes.filter(n => n.type === 'table' && n.dataset_id === d.dataset_id);
+                    return ns.length ? ns.reduce((s, n) => s + n.x, 0) / ns.length : d.x;
+                })
+                .attr("y", d => {
+                    const ns = nodes.filter(n => n.type === 'table' && n.dataset_id === d.dataset_id);
+                    return ns.length ? Math.min(...ns.map(n => n.y)) - 28 : d.y;
+                });
+
+            updateHulls();
         });
-        
+
+        // 시뮬레이션 안정화 후 전체 그래프 화면 자동 맞춤
+        simulation.on("end", () => {
+            updateMinimap();
+            try {
+                const bounds = mainGroup.node().getBBox();
+                if (!bounds.width || !bounds.height) return;
+                const pad = 60;
+                const bw = bounds.width + 2 * pad;
+                const bh = bounds.height + 2 * pad;
+                const scale = Math.min(width / bw, height / bh, 1.0);
+                const cx = bounds.x + bounds.width / 2;
+                const cy = bounds.y + bounds.height / 2;
+                svg.transition().duration(1000).call(
+                    zoom.transform,
+                    d3.zoomIdentity.translate(width / 2, height / 2).scale(scale).translate(-cx, -cy)
+                );
+            } catch (e) {}
+        });
+
         // --- 커스텀 클러스터 Force ---
         function forceCluster() {
-            let nodes, strength = 0.6;
+            let allNodes;
             const clusterAnchors = new Map(graphData.dataset_nodes.map(d => [d.dataset_id, d]));
 
+            // 외부 시스템 타깃 위치 사전 계산
+            const externalTargets = new Map();
+            graphData.external_nodes.forEach(ext => {
+                const connDs = ext.connected_datasets || [];
+                if (connDs.length > 0) {
+                    let avgX = 0, avgY = 0, cnt = 0;
+                    connDs.forEach(dsId => {
+                        const anchor = clusterAnchors.get(dsId);
+                        if (anchor) { avgX += (anchor.fx || anchor.x); avgY += (anchor.fy || anchor.y); cnt++; }
+                    });
+                    if (cnt > 0) {
+                        avgX /= cnt; avgY /= cnt;
+                        const angle = Math.atan2(avgY, avgX);
+                        const dist = Math.sqrt(avgX * avgX + avgY * avgY);
+                        externalTargets.set(ext.id, { x: avgX + Math.cos(angle) * Math.max(130, dist * 0.4), y: avgY + Math.sin(angle) * Math.max(130, dist * 0.4) });
+                    }
+                }
+            });
+
             function force(alpha) {
-                for (const node of nodes) {
-                    if (node.type !== 'table') continue;
-                    const anchor = clusterAnchors.get(node.dataset_id);
-                    if (!anchor || anchor === node) continue;
-                    
-                    node.vx -= (node.x - anchor.x) * strength * alpha;
-                    node.vy -= (node.y - anchor.y) * strength * alpha;
+                for (const n of allNodes) {
+                    if (n.type === 'table') {
+                        const anchor = clusterAnchors.get(n.dataset_id);
+                        if (!anchor || anchor === n) continue;
+                        const count = dsTableCounts.get(n.dataset_id) || 1;
+                        // 클러스터 크기에 따라 인력 약화 (40개=0.1, 3개=0.56)
+                        const strength = Math.max(0.1, 0.6 - count / 80);
+                        n.vx -= (n.x - (anchor.fx || anchor.x)) * strength * alpha;
+                        n.vy -= (n.y - (anchor.fy || anchor.y)) * strength * alpha;
+                    } else if (n.type === 'external') {
+                        const target = externalTargets.get(n.id);
+                        if (target) {
+                            n.vx -= (n.x - target.x) * 0.3 * alpha;
+                            n.vy -= (n.y - target.y) * 0.3 * alpha;
+                        }
+                    }
                 }
             }
-            force.initialize = _ => nodes = _;
+            force.initialize = _ => allNodes = _;
             return force;
         }
 
