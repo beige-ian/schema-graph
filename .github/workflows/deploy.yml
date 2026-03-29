@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '30 1 * * *'  # 매일 10:30 KST (01:30 UTC)
   workflow_dispatch:       # 수동 트리거
+  push:
+    branches:
+      - main               # main 브랜치 push 시 자동 배포
 
 jobs:
   build-and-deploy:

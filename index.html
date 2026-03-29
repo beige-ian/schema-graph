@@ -9276,6 +9276,7 @@
             .on("zoom", zoomed);
         
         svg.call(zoom);
+        svg.on("dblclick.zoom", null);
 
         function zoomed({transform}) {
             mainGroup.attr("transform", transform);
