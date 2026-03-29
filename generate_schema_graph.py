@@ -1089,9 +1089,12 @@ def generate_html(graph_data: dict) -> str:
             updateHulls();
         });
 
-        // 시뮬레이션 안정화 후 전체 그래프 화면 자동 맞춤
+        // 시뮬레이션 안정화 후 전체 그래프 화면 자동 맞춤 (최초 1회만)
+        let initialFitDone = false;
         simulation.on("end", () => {
             updateMinimap();
+            if (initialFitDone) return;
+            initialFitDone = true;
             try {
                 const visibleNodes = nodes.filter(n => n.type === 'table');
                 if (!visibleNodes.length) return;
