@@ -1060,14 +1060,21 @@ def generate_html(graph_data: dict) -> str:
         simulation.on("end", () => {
             updateMinimap();
             try {
-                const bounds = mainGroup.node().getBBox();
-                if (!bounds.width || !bounds.height) return;
-                const pad = 60;
-                const bw = bounds.width + 2 * pad;
-                const bh = bounds.height + 2 * pad;
+                const visibleNodes = nodes.filter(n => n.type === 'table' || n.type === 'external');
+                if (!visibleNodes.length) return;
+                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+                visibleNodes.forEach(n => {
+                    minX = Math.min(minX, n.x - 70);
+                    maxX = Math.max(maxX, n.x + 70);
+                    minY = Math.min(minY, n.y - 25);
+                    maxY = Math.max(maxY, n.y + 25);
+                });
+                const pad = 80;
+                const bw = (maxX - minX) + 2 * pad;
+                const bh = (maxY - minY) + 2 * pad;
                 const scale = Math.min(width / bw, height / bh, 1.0);
-                const cx = bounds.x + bounds.width / 2;
-                const cy = bounds.y + bounds.height / 2;
+                const cx = (minX + maxX) / 2;
+                const cy = (minY + maxY) / 2;
                 svg.transition().duration(1000).call(
                     zoom.transform,
                     d3.zoomIdentity.translate(width / 2, height / 2).scale(scale).translate(-cx, -cy)
