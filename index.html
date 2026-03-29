@@ -128,7 +128,7 @@
             overflow-y: auto;
             padding: 16px;
             box-sizing: border-box;
-            transition: margin-right 0.3s ease;
+            transition: transform 0.3s ease;
             position: absolute;
             right: 0;
             top: 0;
@@ -136,7 +136,7 @@
             z-index: 5;
         }
         #side-panel.hidden {
-            margin-right: calc(-1 * var(--sidepanel-width) - 1px);
+            transform: translateX(100%);
         }
         #panel-toggle {
             position: absolute;
