@@ -432,7 +432,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 18:15:21</span>
+        <span>Generated at: 2026-03-29 18:24:25</span>
     </footer>
 
     <script>
@@ -8978,7 +8978,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 18:15:21"
+  "generated_at": "2026-03-29 18:24:25"
 };
 
         // --- 초기 설정 ---
@@ -9324,7 +9324,7 @@
         simulation.on("end", () => {
             updateMinimap();
             try {
-                const visibleNodes = nodes.filter(n => n.type === 'table' || n.type === 'external');
+                const visibleNodes = nodes.filter(n => n.type === 'table');
                 if (!visibleNodes.length) return;
                 let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
                 visibleNodes.forEach(n => {
