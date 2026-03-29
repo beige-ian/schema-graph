@@ -407,7 +407,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 06:16:53</span>
+        <span>Generated at: 2026-03-29 08:50:43</span>
     </footer>
 
     <script>
@@ -4485,11 +4485,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_EXWP8IMaS4",
+      "id": "mixpanel.mp_identity_mappings_data_p2kTjKGEmu",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_EXWP8IMaS4",
-      "name_ko": "mp_identity_mappings_data_EXWP8IMaS4",
+      "table_id": "mp_identity_mappings_data_p2kTjKGEmu",
+      "name_ko": "mp_identity_mappings_data_p2kTjKGEmu",
       "description": "",
       "columns": [
         {
@@ -4514,11 +4514,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_N2dK9tUDN4",
+      "id": "mixpanel.mp_identity_mappings_data_r4Z9UjXY84",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_N2dK9tUDN4",
-      "name_ko": "mp_identity_mappings_data_N2dK9tUDN4",
+      "table_id": "mp_identity_mappings_data_r4Z9UjXY84",
+      "name_ko": "mp_identity_mappings_data_r4Z9UjXY84",
       "description": "",
       "columns": [
         {
@@ -4680,69 +4680,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_NxdJ1cC6MN",
+      "id": "mixpanel.mp_people_data_HEmO66fc81",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_NxdJ1cC6MN",
-      "name_ko": "mp_people_data_NxdJ1cC6MN",
-      "description": "",
-      "columns": [
-        {
-          "name": "properties",
-          "type": "JSON",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_people_data_ScGRHYwkd0",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_ScGRHYwkd0",
-      "name_ko": "mp_people_data_ScGRHYwkd0",
-      "description": "",
-      "columns": [
-        {
-          "name": "properties",
-          "type": "JSON",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_people_data_YlpE7K19Do",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_YlpE7K19Do",
-      "name_ko": "mp_people_data_YlpE7K19Do",
+      "table_id": "mp_people_data_HEmO66fc81",
+      "name_ko": "mp_people_data_HEmO66fc81",
       "description": "",
       "columns": [
         {
@@ -4802,6 +4744,35 @@
       "table_id": "mp_people_data_view",
       "name_ko": "mp_people_data_view",
       "description": "Mixpanel 사용자 속성 데이터",
+      "columns": [
+        {
+          "name": "properties",
+          "type": "JSON",
+          "nullable": true
+        },
+        {
+          "name": "distinct_id",
+          "type": "STRING",
+          "nullable": true
+        }
+      ],
+      "column_count": 2,
+      "dataset_meta": {
+        "id": "mixpanel",
+        "label_ko": "Mixpanel 이벤트",
+        "source_system": "Mixpanel native connector",
+        "sync_frequency": "real-time",
+        "color": "#a855f7",
+        "tier": 1
+      }
+    },
+    {
+      "id": "mixpanel.mp_people_data_xpW7JMm54z",
+      "type": "table",
+      "dataset_id": "mixpanel",
+      "table_id": "mp_people_data_xpW7JMm54z",
+      "name_ko": "mp_people_data_xpW7JMm54z",
+      "description": "",
       "columns": [
         {
           "name": "properties",
@@ -8982,7 +8953,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 06:16:53"
+  "generated_at": "2026-03-29 08:50:43"
 };
 
         // --- 초기 설정 ---
@@ -9320,14 +9291,21 @@
         simulation.on("end", () => {
             updateMinimap();
             try {
-                const bounds = mainGroup.node().getBBox();
-                if (!bounds.width || !bounds.height) return;
-                const pad = 60;
-                const bw = bounds.width + 2 * pad;
-                const bh = bounds.height + 2 * pad;
+                const visibleNodes = nodes.filter(n => n.type === 'table' || n.type === 'external');
+                if (!visibleNodes.length) return;
+                let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+                visibleNodes.forEach(n => {
+                    minX = Math.min(minX, n.x - 70);
+                    maxX = Math.max(maxX, n.x + 70);
+                    minY = Math.min(minY, n.y - 25);
+                    maxY = Math.max(maxY, n.y + 25);
+                });
+                const pad = 80;
+                const bw = (maxX - minX) + 2 * pad;
+                const bh = (maxY - minY) + 2 * pad;
                 const scale = Math.min(width / bw, height / bh, 1.0);
-                const cx = bounds.x + bounds.width / 2;
-                const cy = bounds.y + bounds.height / 2;
+                const cx = (minX + maxX) / 2;
+                const cy = (minY + maxY) / 2;
                 svg.transition().duration(1000).call(
                     zoom.transform,
                     d3.zoomIdentity.translate(width / 2, height / 2).scale(scale).translate(-cx, -cy)
