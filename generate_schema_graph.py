@@ -400,13 +400,13 @@ def generate_html(graph_data: dict) -> str:
             flex-grow: 1;
             position: relative;
         }
-        svg {
+        #schema-graph {
             display: block;
             width: 100%;
             height: 100%;
             cursor: grab;
         }
-        svg:active { cursor: grabbing; }
+        #schema-graph:active { cursor: grabbing; }
         
         #side-panel {
             width: var(--sidepanel-width);
