@@ -433,7 +433,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-29 23:50:01</span>
+        <span>Generated at: 2026-03-30 01:21:00</span>
     </footer>
 
     <script>
@@ -4511,11 +4511,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_FsxdbqAyTe",
+      "id": "mixpanel.mp_identity_mappings_data_M37zMpXZMd",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_FsxdbqAyTe",
-      "name_ko": "mp_identity_mappings_data_FsxdbqAyTe",
+      "table_id": "mp_identity_mappings_data_M37zMpXZMd",
+      "name_ko": "mp_identity_mappings_data_M37zMpXZMd",
       "description": "",
       "columns": [
         {
@@ -4540,40 +4540,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_R2XH9ucMtl",
+      "id": "mixpanel.mp_identity_mappings_data_N1lB416qEw",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_R2XH9ucMtl",
-      "name_ko": "mp_identity_mappings_data_R2XH9ucMtl",
-      "description": "",
-      "columns": [
-        {
-          "name": "resolved_distinct_id",
-          "type": "STRING",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_identity_mappings_data_YUJtTdy8M1",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_YUJtTdy8M1",
-      "name_ko": "mp_identity_mappings_data_YUJtTdy8M1",
+      "table_id": "mp_identity_mappings_data_N1lB416qEw",
+      "name_ko": "mp_identity_mappings_data_N1lB416qEw",
       "description": "",
       "columns": [
         {
@@ -4735,11 +4706,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_BOrgquG2Ye",
+      "id": "mixpanel.mp_people_data_EfMMM5ns38",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_BOrgquG2Ye",
-      "name_ko": "mp_people_data_BOrgquG2Ye",
+      "table_id": "mp_people_data_EfMMM5ns38",
+      "name_ko": "mp_people_data_EfMMM5ns38",
       "description": "",
       "columns": [
         {
@@ -4764,11 +4735,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_s4j5IR9dip",
+      "id": "mixpanel.mp_people_data_TtaS2ErsSD",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_s4j5IR9dip",
-      "name_ko": "mp_people_data_s4j5IR9dip",
+      "table_id": "mp_people_data_TtaS2ErsSD",
+      "name_ko": "mp_people_data_TtaS2ErsSD",
       "description": "",
       "columns": [
         {
@@ -8979,7 +8950,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-29 23:50:01"
+  "generated_at": "2026-03-30 01:21:00"
 };
 
         // --- 초기 설정 ---
@@ -9360,7 +9331,7 @@
                 const cy = (minY + maxY) / 2;
                 svg.transition().duration(1000).call(
                     zoom.transform,
-                    d3.zoomIdentity.translate(width / 2, height / 2).scale(scale).translate(-cx, -cy)
+                    d3.zoomIdentity.scale(scale).translate(-cx, -cy)
                 );
             } catch (e) {}
         });
@@ -9618,7 +9589,6 @@
             
             const k = 1.2;
             const transform = d3.zoomIdentity
-                .translate(width / 2, height / 2)
                 .scale(k)
                 .translate(-targetNode.x, -targetNode.y);
 
