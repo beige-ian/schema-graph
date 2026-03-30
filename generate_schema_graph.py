@@ -670,7 +670,7 @@ def generate_html(graph_data: dict) -> str:
             <input type="text" id="login-id" placeholder="ID" autocomplete="username">
             <input type="password" id="login-pw" placeholder="Password" autocomplete="current-password">
             <button id="login-btn">로그인</button>
-            <div class="login-error" id="login-error">아이디 또는 비밀번호가 틀립니다.</div>
+            <div class="login-error" id="login-error"></div>
         </div>
     </div>
     <header>
@@ -727,22 +727,46 @@ def generate_html(graph_data: dict) -> str:
     <script>
         // --- 인증 ---
         (function() {
-            if (sessionStorage.getItem('schema_auth') === '1') {
+            function unlock() {
                 document.getElementById('login-overlay').classList.add('hidden');
-                return;
             }
-            const doLogin = () => {
+            async function checkSession() {
+                const token = sessionStorage.getItem('schema_auth');
+                if (!token) { document.getElementById('login-id').focus(); return; }
+                try {
+                    const r = await fetch('/api/verify', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({token})});
+                    const d = await r.json();
+                    if (r.ok && d.ok) { unlock(); return; }
+                } catch(e) {}
+                sessionStorage.removeItem('schema_auth');
+                document.getElementById('login-id').focus();
+            }
+            checkSession();
+            async function tryLogin() {
                 const id = document.getElementById('login-id').value;
                 const pw = document.getElementById('login-pw').value;
-                if (id === 'covering_schema' && pw === 'covering_schema') {
-                    sessionStorage.setItem('schema_auth', '1');
-                    document.getElementById('login-overlay').classList.add('hidden');
-                } else {
+                const btn = document.getElementById('login-btn');
+                btn.disabled = true;
+                document.getElementById('login-error').style.display = 'none';
+                try {
+                    const r = await fetch('/api/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, password:pw})});
+                    const d = await r.json();
+                    if (r.ok && d.ok) {
+                        sessionStorage.setItem('schema_auth', d.token);
+                        unlock();
+                    } else {
+                        document.getElementById('login-error').textContent = d.error || '아이디 또는 비밀번호가 틀립니다.';
+                        document.getElementById('login-error').style.display = 'block';
+                    }
+                } catch(e) {
+                    document.getElementById('login-error').textContent = '서버 연결 오류가 발생했습니다.';
                     document.getElementById('login-error').style.display = 'block';
+                } finally {
+                    btn.disabled = false;
                 }
-            };
-            document.getElementById('login-btn').addEventListener('click', doLogin);
-            document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+            }
+            document.getElementById('login-btn').addEventListener('click', tryLogin);
+            document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
         })();
 
         // --- 인라인 D3.js v7 라이브러리 ---
