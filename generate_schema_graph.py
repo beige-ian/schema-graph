@@ -1129,7 +1129,7 @@ def generate_html(graph_data: dict) -> str:
                 const cy = (minY + maxY) / 2;
                 svg.transition().duration(1000).call(
                     zoom.transform,
-                    d3.zoomIdentity.translate(width / 2, height / 2).scale(scale).translate(-cx, -cy)
+                    d3.zoomIdentity.scale(scale).translate(-cx, -cy)
                 );
             } catch (e) {}
         });
@@ -1387,7 +1387,6 @@ def generate_html(graph_data: dict) -> str:
             
             const k = 1.2;
             const transform = d3.zoomIdentity
-                .translate(width / 2, height / 2)
                 .scale(k)
                 .translate(-targetNode.x, -targetNode.y);
 
