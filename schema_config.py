@@ -71,6 +71,30 @@ EDGES = [
     {'source': 'secure_dataset.order', 'target': 'secure_dataset.order_receipt_v2', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:1'},
     {'source': 'secure_dataset.order', 'target': 'secure_dataset.order_status_log', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:N'},
     {'source': 'secure_dataset.order', 'target': 'secure_dataset.order_image', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.user', 'target': 'secure_dataset.order_v2', 'source_col': 'id', 'target_col': 'user_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.company', 'target': 'secure_dataset.order_v2', 'source_col': 'id', 'target_col': 'company_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.user_coupon', 'source_col': 'user_coupon_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.payment_policy', 'source_col': 'payment_policy_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.order_customer_snapshot', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:1'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.order_address_snapshot', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:1'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.order_access_instruction', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:1'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.order_line', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.order_status_event', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.order_invoice', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.order_image_v2', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.order_v2', 'target': 'secure_dataset.fulfillment', 'source_col': 'id', 'target_col': 'order_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.order_line', 'target': 'secure_dataset.product', 'source_col': 'product_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.order_line', 'target': 'secure_dataset.order_line_change_event', 'source_col': 'id', 'target_col': 'order_line_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.fulfillment', 'target': 'secure_dataset.rider', 'source_col': 'rider_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.fulfillment', 'target': 'secure_dataset.fulfillment_item', 'source_col': 'id', 'target_col': 'fulfillment_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.fulfillment', 'target': 'secure_dataset.fulfillment_status_event', 'source_col': 'id', 'target_col': 'fulfillment_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.fulfillment', 'target': 'secure_dataset.fulfillment_assignment', 'source_col': 'id', 'target_col': 'fulfillment_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.fulfillment', 'target': 'secure_dataset.fulfillment_message', 'source_col': 'id', 'target_col': 'fulfillment_id', 'rel': '1:N'},
+    {'source': 'secure_dataset.fulfillment_item', 'target': 'secure_dataset.order_line', 'source_col': 'order_line_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.fulfillment_assignment', 'target': 'secure_dataset.rider', 'source_col': 'rider_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.fulfillment_message', 'target': 'secure_dataset.rider', 'source_col': 'rider_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.order_image_v2', 'target': 'secure_dataset.fulfillment', 'source_col': 'fulfillment_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.order_invoice', 'target': 'secure_dataset.invoice', 'source_col': 'invoice_id', 'target_col': 'id', 'rel': 'N:1'},
     {'source': 'secure_dataset.user', 'target': 'secure_dataset.user_address', 'source_col': 'id', 'target_col': 'user_id', 'rel': '1:N'},
     {'source': 'secure_dataset.user_address', 'target': 'secure_dataset.address', 'source_col': 'address_id', 'target_col': 'id', 'rel': 'N:1'},
     {'source': 'secure_dataset.address', 'target': 'secure_dataset.service_region', 'source_col': 'h_code', 'target_col': 'h_code', 'rel': 'N:1'},
@@ -81,7 +105,7 @@ EDGES = [
     {'source': 'secure_dataset.subscription_invoice', 'target': 'secure_dataset.payment_event', 'source_col': 'invoice_id', 'target_col': 'invoice_id', 'rel': '1:N'},
     {'source': 'secure_dataset.user', 'target': 'secure_dataset.assignment', 'source_col': 'id', 'target_col': 'user_id', 'rel': '1:N'},
     {'source': 'secure_dataset.assignment', 'target': 'secure_dataset.experiment', 'source_col': 'experiment_id', 'target_col': 'id', 'rel': 'N:1'},
-    {'source': 'secure_dataset.order', 'target': 'secure_dataset.coupon', 'source_col': 'user_coupon_id', 'target_col': 'id', 'rel': 'N:1'},
+    {'source': 'secure_dataset.order', 'target': 'secure_dataset.user_coupon', 'source_col': 'user_coupon_id', 'target_col': 'id', 'rel': 'N:1'},
     {'source': 'secure_dataset.coupon', 'target': 'secure_dataset.coupon_policy', 'source_col': 'coupon_policy_id', 'target_col': 'id', 'rel': 'N:1'},
     {'source': 'secure_dataset.order', 'target': 'secure_dataset.payment_policy', 'source_col': 'payment_policy_id', 'target_col': 'id', 'rel': 'N:1'},
     {'source': 'secure_dataset.service_region', 'target': 'secure_dataset.payment_policy', 'source_col': 'payment_policy_id', 'target_col': 'id', 'rel': 'N:1'},
@@ -113,7 +137,7 @@ TABLE_OVERRIDES = {
         }
     },
     'secure_dataset.order': {
-        'pk': ['id'], 'label_ko': '주문', 'description': '정기수거 주문',
+        'pk': ['id'], 'label_ko': '주문 (레거시)', 'description': '마이그레이션 이전 주문 모델. 신규 주문/방문은 order_v2 + fulfillment 기준',
         'enums': {
             'status': ['PAYMENT_COMPLETED', 'COMPLETED', 'CHECK_COMPLETED', 'USER_CANCELED', 'ADMIN_CANCELED', 'SUBMIT', 'READY', 'RUNNING'],
             'request_type': ['DEFAULT_GARBAGE', 'RECYCLING'],
@@ -127,8 +151,102 @@ TABLE_OVERRIDES = {
             'payment_method_type': ['CARD', 'TRANSFER', 'VIRTUAL_ACCOUNT']
         }
     },
-    'secure_dataset.order_status_log': {'pk': [], 'label_ko': '주문 상태 로그', 'description': '주문 상태 변경 이력'},
-    'secure_dataset.order_image': {'pk': [], 'label_ko': '주문 사진', 'description': '수거 전후 사진'},
+    'secure_dataset.order_status_log': {'pk': [], 'label_ko': '주문 상태 로그 (레거시)', 'description': '마이그레이션 이전 주문 상태 변경 이력'},
+    'secure_dataset.order_image': {'pk': [], 'label_ko': '주문 사진 (레거시)', 'description': '마이그레이션 이전 수거 전후 사진'},
+    'secure_dataset.order_v2': {
+        'pk': ['id'], 'label_ko': '주문 V2',
+        'description': '신규 주문 도메인의 계약 단위 주문. 주문 상태는 계약 단계 기준으로 관리됩니다.',
+        'enums': {
+            'status': ['CREATED', 'READY', 'IN_PROGRESS', 'COMPLETED', 'CANCELED']
+        },
+        'columns': {
+            'order_number': {'description': '사용자/백오피스에 노출되는 주문 번호'},
+            'status': {'description': '주문 전체 계약 상태'},
+            'payment_policy_id': {'description': '적용된 결제 정책'},
+            'user_coupon_id': {'description': '적용된 사용자 쿠폰'},
+            'company_id': {'description': 'B2B 주문인 경우 연결된 기업 고객'},
+        }
+    },
+    'secure_dataset.order_customer_snapshot': {
+        'pk': ['id'], 'label_ko': '주문 고객 스냅샷',
+        'description': '주문 생성 시점의 고객 이름/전화번호 스냅샷. 전화번호는 마스킹되어 저장됩니다.'
+    },
+    'secure_dataset.order_address_snapshot': {
+        'pk': ['id'], 'label_ko': '주문 주소 스냅샷',
+        'description': '주문 시점의 수거 주소 스냅샷. 이후 사용자 주소가 바뀌어도 주문 주소는 유지됩니다.'
+    },
+    'secure_dataset.order_access_instruction': {
+        'pk': ['id'], 'label_ko': '출입 정보',
+        'description': '해당 주문 수행에 필요한 출입 방법, 비밀번호, 요청사항.'
+    },
+    'secure_dataset.order_line': {
+        'pk': ['id'], 'label_ko': '주문 품목',
+        'description': '주문에 포함된 상품 라인. 봉투 구매/수거 박스/수거 봉투 등을 표현합니다.'
+    },
+    'secure_dataset.order_line_change_event': {
+        'pk': ['id'], 'label_ko': '주문 품목 변경 이력',
+        'description': '주문 품목 수량 등 필드 변경 이벤트 로그.'
+    },
+    'secure_dataset.product': {
+        'pk': ['id'], 'label_ko': '상품 마스터',
+        'description': '신규 주문 도메인에서 사용하는 상품 정의.',
+        'enums': {
+            'product_code': [
+                'COVERING_BAG',
+                'LARGE_COVERING_BAG',
+                'PICKUP_BOX',
+                'PICKUP_COVERING_BAG',
+                'PICKUP_LARGE_COVERING_BAG'
+            ]
+        }
+    },
+    'secure_dataset.fulfillment': {
+        'pk': ['id'], 'label_ko': '방문/수행',
+        'description': '기사 방문 작업 단위. 방문 상태는 수행 단계 기준으로 관리되며 재방문 시 여러 건이 연결될 수 있습니다.',
+        'enums': {
+            'status': ['CREATED', 'READY', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELED'],
+            'failure_reason_code': ['ACCESS_DENIED', 'NOT_FOUND', 'POLICY_VIOLATION']
+        },
+        'columns': {
+            'status': {'description': '방문 작업 상태'},
+            'failure_reason_code': {'description': '실패 유형 코드'},
+            'failure_reason_message': {'description': '실패 상세 메시지'},
+            'scheduled_start_at': {'description': '방문 예정 시작 시각'},
+            'scheduled_end_at': {'description': '방문 예정 종료 시각'},
+        }
+    },
+    'secure_dataset.fulfillment_item': {
+        'pk': ['id'], 'label_ko': '방문 품목 수행',
+        'description': '방문 시점 기준 품목별 실제 수거 결과와 실패 정보를 기록합니다.'
+    },
+    'secure_dataset.order_status_event': {
+        'pk': ['id'], 'label_ko': '주문 상태 이벤트',
+        'description': '주문 상태 변경 이력. from_status/to_status, actor, reason, metadata를 저장합니다.'
+    },
+    'secure_dataset.fulfillment_status_event': {
+        'pk': ['id'], 'label_ko': '방문 상태 이벤트',
+        'description': '방문 상태 변경 이력. 실패 사유 파생에 쓰이는 메타데이터가 함께 저장됩니다.'
+    },
+    'secure_dataset.fulfillment_assignment': {
+        'pk': ['id'], 'label_ko': '방문 배정',
+        'description': '방문 수행을 기사에게 배정한 이력과 경로 최적화 결과.'
+    },
+    'secure_dataset.fulfillment_message': {
+        'pk': ['id'], 'label_ko': '방문 메시지',
+        'description': '방문 수행 과정에서 기사에게 발송된 메시지 이력.'
+    },
+    'secure_dataset.order_invoice': {
+        'pk': ['id'], 'label_ko': '주문 청구서 연결',
+        'description': '주문과 청구서(invoice)를 연결하는 브리지 테이블.'
+    },
+    'secure_dataset.order_image_v2': {
+        'pk': ['id'], 'label_ko': '주문 이미지 V2',
+        'description': '신규 주문 도메인 이미지 저장소. 주문/방문 기준 사진 메타데이터를 기록합니다.'
+    },
+    'secure_dataset.feature_flag': {
+        'pk': ['name'], 'label_ko': '기능 플래그',
+        'description': '서비스별 기능 토글 설정.'
+    },
     'secure_dataset.user_address': {'pk': [], 'label_ko': '사용자 주소', 'description': '사용자의 등록 주소 (active=true가 현재 주소)'},
     'secure_dataset.address': {'pk': ['id'], 'label_ko': '주소', 'description': '실제 주소 정보 + h_code(법정동코드)'},
     'secure_dataset.service_region': {'pk': ['h_code'], 'label_ko': '서비스 지역', 'description': '수거 가능 지역 및 요일/요금 정책'},

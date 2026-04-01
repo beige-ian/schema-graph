@@ -342,6 +342,15 @@
         .zoom-controls button:last-child { border-radius: 0 0 4px 4px; }
         .zoom-controls button:hover { background-color: #2a2a2f; }
 
+        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--card-color); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: right 0.3s ease; }
+        .legend-toggle { width: 100%; padding: 8px 12px; background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 13px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
+        .legend-body { padding: 4px 12px 10px; display: none; }
+        .legend-body.open { display: block; }
+        .legend-section { font-size: 10px; color: var(--secondary-text); margin: 6px 0 3px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 3px 0; color: var(--text-color); }
+        .l-line { flex-shrink: 0; }
+        .l-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
         #login-overlay {
             position: fixed; inset: 0; background: var(--bg-color);
             z-index: 9999; display: flex; align-items: center; justify-content: center;
@@ -364,15 +373,6 @@
         }
         .login-box button:hover { opacity: 0.9; }
         .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
-        .legend-panel { position: fixed; right: 12px; bottom: 12px; z-index: 100; background: var(--card-color); border: 1px solid var(--border-color); border-radius: 8px; min-width: 190px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: right 0.3s ease; }
-        .legend-toggle { width: 100%; padding: 8px 12px; background: none; border: none; color: var(--text-color); cursor: pointer; font-size: 13px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
-        .legend-body { padding: 4px 12px 10px; display: none; }
-        .legend-body.open { display: block; }
-        .legend-section { font-size: 10px; color: var(--secondary-text); margin: 6px 0 3px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
-        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 3px 0; color: var(--text-color); }
-        .l-line { flex-shrink: 0; }
-        .l-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-
         #scan-time { font-size: 11px; color: var(--secondary-text); margin-left: 12px; vertical-align: middle; }
         .copy-btn {
             display: inline-flex; align-items: center; gap: 4px;
@@ -444,7 +444,7 @@
     </main>
     <footer>
         <span id="footer-stats"></span> |
-        <span>Generated at: 2026-03-30 14:51:21</span>
+        <span>Generated at: 2026-04-01 09:49:51</span>
     </footer>
 
     <script>
@@ -505,13 +505,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "address",
-      "name_ko": "address",
+      "name_ko": "주소",
       "description": "실제 주소 정보 + h_code(법정동코드)",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "road_address",
@@ -564,7 +565,7 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "assignment",
-      "name_ko": "assignment",
+      "name_ko": "실험 배정",
       "description": "A/B 테스트 사용자 배정",
       "columns": [
         {
@@ -613,13 +614,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "auth",
-      "name_ko": "auth",
+      "name_ko": "인증",
       "description": "전화번호 인증 코드 발급 및 검증 이력",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "masked_phone",
@@ -667,13 +669,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "block_user",
-      "name_ko": "block_user",
+      "name_ko": "이용 정지",
       "description": "서비스 이용 정지 처리된 사용자 목록",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -716,13 +719,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "comment",
-      "name_ko": "comment",
+      "name_ko": "주문 코멘트",
       "description": "기사·매니저가 주문에 남긴 메모",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "address_id",
@@ -795,13 +799,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "company",
-      "name_ko": "company",
+      "name_ko": "기업 고객",
       "description": "기업 계약 고객 정보 (B2B)",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "uuid",
@@ -864,13 +869,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "company_address",
-      "name_ko": "company_address",
+      "name_ko": "기업 수거 주소",
       "description": "기업 고객의 등록 수거 주소 목록",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "company_id",
@@ -923,13 +929,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "company_schedule",
-      "name_ko": "company_schedule",
+      "name_ko": "기업 스케줄",
       "description": "기업 고객의 정기수거 요일·시간 스케줄",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "company_id",
@@ -1037,13 +1044,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "coupon",
-      "name_ko": "coupon",
+      "name_ko": "쿠폰",
       "description": "사용자에게 발급된 쿠폰",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "coupon_policy_id",
@@ -1086,13 +1094,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "coupon_policy",
-      "name_ko": "coupon_policy",
+      "name_ko": "쿠폰 정책",
       "description": "쿠폰 할인 규칙",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "description",
@@ -1127,7 +1136,11 @@
         {
           "name": "discount_type",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "FIXED",
+            "PERCENTAGE"
+          ]
         },
         {
           "name": "expire_date",
@@ -1185,7 +1198,7 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "device",
-      "name_ko": "device",
+      "name_ko": "디바이스",
       "description": "사용자 기기 정보 및 마케팅 수신 동의",
       "columns": [
         {
@@ -1274,13 +1287,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "display_item",
-      "name_ko": "display_item",
+      "name_ko": "앱 배너",
       "description": "앱 내 배너·홍보 컨텐츠 관리",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "title",
@@ -1368,13 +1382,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "experiment",
-      "name_ko": "experiment",
+      "name_ko": "실험",
       "description": "A/B 테스트 메타데이터",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "name",
@@ -1384,7 +1399,12 @@
         {
           "name": "status",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "RUNNING",
+            "COMPLETED",
+            "PAUSED"
+          ]
         },
         {
           "name": "hashing_salt",
@@ -1428,17 +1448,436 @@
       }
     },
     {
+      "id": "secure_dataset.feature_flag",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "feature_flag",
+      "name_ko": "기능 플래그",
+      "description": "서비스별 기능 토글 설정.",
+      "columns": [
+        {
+          "name": "name",
+          "type": "STRING",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "enabled",
+          "type": "BOOL",
+          "nullable": true
+        },
+        {
+          "name": "description",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "service_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 6,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.fulfillment",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "fulfillment",
+      "name_ko": "방문/수행",
+      "description": "기사 방문 작업 단위. 방문 상태는 수행 단계 기준으로 관리되며 재방문 시 여러 건이 연결될 수 있습니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "nullable": true,
+          "description": "방문 작업 상태",
+          "enum": [
+            "CREATED",
+            "READY",
+            "RUNNING",
+            "COMPLETED",
+            "FAILED",
+            "CANCELED"
+          ]
+        },
+        {
+          "name": "rider_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "failure_reason_code",
+          "type": "STRING",
+          "nullable": true,
+          "description": "실패 유형 코드",
+          "enum": [
+            "ACCESS_DENIED",
+            "NOT_FOUND",
+            "POLICY_VIOLATION"
+          ]
+        },
+        {
+          "name": "failure_reason_message",
+          "type": "STRING",
+          "nullable": true,
+          "description": "실패 상세 메시지"
+        },
+        {
+          "name": "scheduled_start_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "description": "방문 예정 시작 시각"
+        },
+        {
+          "name": "scheduled_end_at",
+          "type": "TIMESTAMP",
+          "nullable": true,
+          "description": "방문 예정 종료 시각"
+        },
+        {
+          "name": "assigned_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "ready_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "started_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "completed_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "canceled_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 15,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.fulfillment_assignment",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "fulfillment_assignment",
+      "name_ko": "방문 배정",
+      "description": "방문 수행을 기사에게 배정한 이력과 경로 최적화 결과.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "rider_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "fulfillment_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "sort_order",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "route_optimized_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "assigned_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 8,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.fulfillment_item",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "fulfillment_item",
+      "name_ko": "방문 품목 수행",
+      "description": "방문 시점 기준 품목별 실제 수거 결과와 실패 정보를 기록합니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "fulfillment_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "order_line_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "item_status",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "actual_quantity",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "actual_weight_grams",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "failure_reason_code",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "failure_reason_message",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "deleted_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 11,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.fulfillment_message",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "fulfillment_message",
+      "name_ko": "방문 메시지",
+      "description": "방문 수행 과정에서 기사에게 발송된 메시지 이력.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "fulfillment_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "rider_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "message_body",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "message_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "status_at_message",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 7,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.fulfillment_status_event",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "fulfillment_status_event",
+      "name_ko": "방문 상태 이벤트",
+      "description": "방문 상태 변경 이력. 실패 사유 파생에 쓰이는 메타데이터가 함께 저장됩니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "fulfillment_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "from_status",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "to_status",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "actor_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "actor_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "reason",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "metadata",
+          "type": "JSON",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 9,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
       "id": "secure_dataset.invoice",
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "invoice",
-      "name_ko": "invoice",
+      "name_ko": "청구서 (레거시)",
       "description": "레거시 청구서",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "invoice_number",
@@ -1481,13 +1920,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "manager",
-      "name_ko": "manager",
+      "name_ko": "어드민 매니저",
       "description": "어드민 시스템 접근 권한이 있는 내부 운영자",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "uuid",
@@ -1540,13 +1980,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "optimize_route_meta",
-      "name_ko": "optimize_route_meta",
+      "name_ko": "배차 최적화 로그",
       "description": "기사 배차 경로 최적화 연산 결과 메타데이터",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "rider_id",
@@ -1579,13 +2020,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "order",
-      "name_ko": "order",
-      "description": "정기수거 주문",
+      "name_ko": "주문 (레거시)",
+      "description": "마이그레이션 이전 주문 모델. 신규 주문/방문은 order_v2 + fulfillment 기준",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -1655,17 +2097,35 @@
         {
           "name": "request_type",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "DEFAULT_GARBAGE",
+            "RECYCLING"
+          ]
         },
         {
           "name": "customer_type",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "INDIVIDUAL",
+            "BUSINESS"
+          ]
         },
         {
           "name": "status",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "PAYMENT_COMPLETED",
+            "COMPLETED",
+            "CHECK_COMPLETED",
+            "USER_CANCELED",
+            "ADMIN_CANCELED",
+            "SUBMIT",
+            "READY",
+            "RUNNING"
+          ]
         },
         {
           "name": "masked_access_info",
@@ -1764,12 +2224,192 @@
       }
     },
     {
+      "id": "secure_dataset.order_access_instruction",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_access_instruction",
+      "name_ko": "출입 정보",
+      "description": "해당 주문 수행에 필요한 출입 방법, 비밀번호, 요청사항.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "entrance_method",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "entrance_password",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "entrance_detail",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "allow_contact_before_arrival",
+          "type": "BOOL",
+          "nullable": true
+        },
+        {
+          "name": "allow_doorbell",
+          "type": "BOOL",
+          "nullable": true
+        },
+        {
+          "name": "request_note",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 10,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.order_address_snapshot",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_address_snapshot",
+      "name_ko": "주문 주소 스냅샷",
+      "description": "주문 시점의 수거 주소 스냅샷. 이후 사용자 주소가 바뀌어도 주문 주소는 유지됩니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "address_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "road_address",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "jibun_address",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "detail_address",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "h_code",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "b_code",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 9,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.order_customer_snapshot",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_customer_snapshot",
+      "name_ko": "주문 고객 스냅샷",
+      "description": "주문 생성 시점의 고객 이름/전화번호 스냅샷. 전화번호는 마스킹되어 저장됩니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "customer_name",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "customer_phone",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 5,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
       "id": "secure_dataset.order_image",
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "order_image",
-      "name_ko": "order_image",
-      "description": "수거 전후 사진",
+      "name_ko": "주문 사진 (레거시)",
+      "description": "마이그레이션 이전 수거 전후 사진",
       "columns": [
         {
           "name": "id",
@@ -1833,17 +2473,248 @@
       }
     },
     {
+      "id": "secure_dataset.order_image_v2",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_image_v2",
+      "name_ko": "주문 이미지 V2",
+      "description": "신규 주문 도메인 이미지 저장소. 주문/방문 기준 사진 메타데이터를 기록합니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "fulfillment_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "image_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "bucket_name",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "image_uri",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "content_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "uploader_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "uploader_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "deleted_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 11,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.order_invoice",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_invoice",
+      "name_ko": "주문 청구서 연결",
+      "description": "주문과 청구서(invoice)를 연결하는 브리지 테이블.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "invoice_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 4,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.order_line",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_line",
+      "name_ko": "주문 품목",
+      "description": "주문에 포함된 상품 라인. 봉투 구매/수거 박스/수거 봉투 등을 표현합니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "product_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "quantity",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "deleted_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 7,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
+      "id": "secure_dataset.order_line_change_event",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_line_change_event",
+      "name_ko": "주문 품목 변경 이력",
+      "description": "주문 품목 수량 등 필드 변경 이벤트 로그.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_line_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "field_name",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "old_value",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "new_value",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "actor_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "actor_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 8,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
       "id": "secure_dataset.order_receipt",
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "order_receipt",
-      "name_ko": "order_receipt",
+      "name_ko": "주문 영수증 (레거시)",
       "description": "구 결제 영수증 (현재는 order_receipt_v2 사용)",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "order_id",
@@ -1926,7 +2797,7 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "order_receipt_v2",
-      "name_ko": "order_receipt_v2",
+      "name_ko": "주문 영수증",
       "description": "결제 영수증",
       "columns": [
         {
@@ -1937,7 +2808,8 @@
         {
           "name": "order_id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "total_amount",
@@ -1947,7 +2819,13 @@
         {
           "name": "payment_status",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "COMPLETED",
+            "PENDING",
+            "REFUNDED",
+            "PARTIALLY_REFUNDED"
+          ]
         },
         {
           "name": "user_payment_method_id",
@@ -1957,7 +2835,12 @@
         {
           "name": "payment_method_type",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "CARD",
+            "TRANSFER",
+            "VIRTUAL_ACCOUNT"
+          ]
         },
         {
           "name": "request_trigger",
@@ -1986,12 +2869,77 @@
       }
     },
     {
+      "id": "secure_dataset.order_status_event",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_status_event",
+      "name_ko": "주문 상태 이벤트",
+      "description": "주문 상태 변경 이력. from_status/to_status, actor, reason, metadata를 저장합니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "from_status",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "to_status",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "actor_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "actor_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "reason",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "metadata",
+          "type": "JSON",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 9,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
       "id": "secure_dataset.order_status_log",
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "order_status_log",
-      "name_ko": "order_status_log",
-      "description": "주문 상태 변경 이력",
+      "name_ko": "주문 상태 로그 (레거시)",
+      "description": "마이그레이션 이전 주문 상태 변경 이력",
       "columns": [
         {
           "name": "id",
@@ -2050,11 +2998,98 @@
       }
     },
     {
+      "id": "secure_dataset.order_v2",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "order_v2",
+      "name_ko": "주문 V2",
+      "description": "신규 주문 도메인의 계약 단위 주문. 주문 상태는 계약 단계 기준으로 관리됩니다.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "order_number",
+          "type": "STRING",
+          "nullable": true,
+          "description": "사용자/백오피스에 노출되는 주문 번호"
+        },
+        {
+          "name": "user_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "company_id",
+          "type": "INT64",
+          "nullable": true,
+          "description": "B2B 주문인 경우 연결된 기업 고객"
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "nullable": true,
+          "description": "주문 전체 계약 상태",
+          "enum": [
+            "CREATED",
+            "READY",
+            "IN_PROGRESS",
+            "COMPLETED",
+            "CANCELED"
+          ]
+        },
+        {
+          "name": "payment_policy_id",
+          "type": "INT64",
+          "nullable": true,
+          "description": "적용된 결제 정책"
+        },
+        {
+          "name": "user_coupon_id",
+          "type": "INT64",
+          "nullable": true,
+          "description": "적용된 사용자 쿠폰"
+        },
+        {
+          "name": "is_locked",
+          "type": "BOOL",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "deleted_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 11,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
       "id": "secure_dataset.payment_event",
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "payment_event",
-      "name_ko": "payment_event",
+      "name_ko": "결제 이벤트",
       "description": "실제 결제 발생 이벤트",
       "columns": [
         {
@@ -2080,7 +3115,12 @@
         {
           "name": "status",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "COMPLETED",
+            "FAILED",
+            "PENDING"
+          ]
         },
         {
           "name": "method_type",
@@ -2113,13 +3153,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "payment_policy",
-      "name_ko": "payment_policy",
+      "name_ko": "요금 정책",
       "description": "지역별 수거 요금",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "policy",
@@ -2162,13 +3203,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "prev_db_order",
-      "name_ko": "prev_db_order",
+      "name_ko": "이관 주문",
       "description": "구 DB에서 이관된 과거 주문 데이터",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -2247,17 +3289,85 @@
       }
     },
     {
+      "id": "secure_dataset.product",
+      "type": "table",
+      "dataset_id": "secure_dataset",
+      "table_id": "product",
+      "name_ko": "상품 마스터",
+      "description": "신규 주문 도메인에서 사용하는 상품 정의.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT64",
+          "nullable": true,
+          "pk": true
+        },
+        {
+          "name": "product_code",
+          "type": "STRING",
+          "nullable": true,
+          "enum": [
+            "COVERING_BAG",
+            "LARGE_COVERING_BAG",
+            "PICKUP_BOX",
+            "PICKUP_COVERING_BAG",
+            "PICKUP_LARGE_COVERING_BAG"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "product_type",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "description",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "is_active",
+          "type": "BOOL",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 8,
+      "dataset_meta": {
+        "id": "secure_dataset",
+        "label_ko": "코어 앱 DB",
+        "source_system": "Main App (AWS RDS)",
+        "sync_frequency": "real-time",
+        "color": "#3b82f6",
+        "tier": 1
+      }
+    },
+    {
       "id": "secure_dataset.receipt",
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "receipt",
-      "name_ko": "receipt",
+      "name_ko": "영수증 (레거시)",
       "description": "구 결제 영수증 (invoice 연계)",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "invoice_id",
@@ -2315,13 +3425,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "region_open_subscriber",
-      "name_ko": "region_open_subscriber",
+      "name_ko": "지역 오픈 알림 신청",
       "description": "서비스 미제공 지역에서 오픈 알림 신청한 사용자",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -2364,13 +3475,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "rider",
-      "name_ko": "rider",
+      "name_ko": "수거 기사",
       "description": "정기수거 담당 기사 계정 및 활성 상태",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "uuid",
@@ -2448,13 +3560,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "rider_comment_like",
-      "name_ko": "rider_comment_like",
+      "name_ko": "코멘트 좋아요",
       "description": "기사가 주문 코멘트에 누른 좋아요",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "comment_id",
@@ -2497,7 +3610,7 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "service_region",
-      "name_ko": "service_region",
+      "name_ko": "서비스 지역",
       "description": "수거 가능 지역 및 요일/요금 정책",
       "columns": [
         {
@@ -2533,7 +3646,8 @@
         {
           "name": "h_code",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "pickup_start_time",
@@ -2581,13 +3695,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "service_region_group",
-      "name_ko": "service_region_group",
+      "name_ko": "지역 그룹",
       "description": "서비스 지역을 묶어 관리하는 그룹",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "title",
@@ -2630,13 +3745,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "service_region_group_map",
-      "name_ko": "service_region_group_map",
+      "name_ko": "지역-그룹 매핑",
       "description": "서비스 지역과 지역 그룹 간 N:M 매핑",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "service_region_group_id",
@@ -2679,13 +3795,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "subscription",
-      "name_ko": "subscription",
+      "name_ko": "구독",
       "description": "정기결제 구독 현황",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -2710,7 +3827,12 @@
         {
           "name": "status",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "ACTIVE",
+            "CANCELED",
+            "PENDING"
+          ]
         },
         {
           "name": "canceled_at",
@@ -2748,7 +3870,7 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "subscription_invoice",
-      "name_ko": "subscription_invoice",
+      "name_ko": "구독 청구서",
       "description": "정기결제 청구 이력",
       "columns": [
         {
@@ -2777,13 +3899,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "subscription_plan",
-      "name_ko": "subscription_plan",
+      "name_ko": "구독 플랜",
       "description": "구독 상품 (가격/주기)",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "plan_name",
@@ -2831,13 +3954,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "user",
-      "name_ko": "user",
+      "name_ko": "사용자",
       "description": "서비스 이용 고객",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "uuid",
@@ -2857,12 +3981,28 @@
         {
           "name": "grade",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "NORMAL",
+            "VIP",
+            "VVIP"
+          ]
         },
         {
           "name": "signup_referral_channel",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "ADS",
+            "FRIEND_REFERRAL",
+            "ETC",
+            "APPSTORE_GOOGLEPLAY",
+            "BLOG",
+            "INFLUENCER",
+            "NEIGHBOR_USE",
+            "COVERING_CAR",
+            "CAFE"
+          ]
         },
         {
           "name": "masked_phone",
@@ -2900,7 +4040,7 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "user_address",
-      "name_ko": "user_address",
+      "name_ko": "사용자 주소",
       "description": "사용자의 등록 주소 (active=true가 현재 주소)",
       "columns": [
         {
@@ -2994,13 +4134,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "user_coupon",
-      "name_ko": "user_coupon",
+      "name_ko": "사용자 쿠폰 발급",
       "description": "사용자에게 발급된 쿠폰 및 사용 여부",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -3058,13 +4199,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "user_payment_method",
-      "name_ko": "user_payment_method",
+      "name_ko": "결제 수단",
       "description": "사용자가 등록한 카드·결제 수단",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -3127,13 +4269,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "variant",
-      "name_ko": "variant",
+      "name_ko": "A/B 변형 그룹",
       "description": "A/B 테스트의 대조군·실험군 정의",
       "columns": [
         {
           "name": "id",
           "type": "INT64",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "experiment_id",
@@ -3176,13 +4319,14 @@
       "type": "table",
       "dataset_id": "secure_dataset",
       "table_id": "withdrawal",
-      "name_ko": "withdrawal",
+      "name_ko": "탈퇴 이력",
       "description": "서비스 탈퇴 사용자의 탈퇴 사유 및 기본 속성",
       "columns": [
         {
           "name": "id",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "user_id",
@@ -3265,7 +4409,7 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "ab_test_cheonan_asan",
-      "name_ko": "ab_test_cheonan_asan",
+      "name_ko": "천안·아산 AB 테스트",
       "description": "천안·아산 지역 오픈 AB 테스트 결과",
       "columns": [
         {
@@ -3319,13 +4463,14 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "bookings",
-      "name_ko": "bookings",
+      "name_ko": "방문수거 예약",
       "description": "대형폐기물 방문수거 예약 (covering-spot)",
       "columns": [
         {
           "name": "booking_id",
           "type": "STRING",
-          "nullable": false
+          "nullable": false,
+          "pk": true
         },
         {
           "name": "date",
@@ -3335,7 +4480,12 @@
         {
           "name": "status",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "CONFIRMED",
+            "CANCELED",
+            "COMPLETED"
+          ]
         },
         {
           "name": "final_price",
@@ -3350,7 +4500,11 @@
         {
           "name": "payment_status",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "enum": [
+            "settled",
+            "unsettled"
+          ]
         },
         {
           "name": "b2b_client_name",
@@ -3483,7 +4637,7 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "brand_msg_experiment_users",
-      "name_ko": "brand_msg_experiment_users",
+      "name_ko": "브랜드 메시지 실험 대상",
       "description": "브랜드 메시지 AB 테스트 대상 사용자",
       "columns": [
         {
@@ -3517,7 +4671,7 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "brand_msg_wave1",
-      "name_ko": "brand_msg_wave1",
+      "name_ko": "브랜드 메시지 1차 발송",
       "description": "브랜드 메시지 1차 발송 대상 및 결과",
       "columns": [
         {
@@ -3577,11 +4731,327 @@
       }
     },
     {
+      "id": "product.eng_1559_benefit_signal_users",
+      "type": "table",
+      "dataset_id": "product",
+      "table_id": "eng_1559_benefit_signal_users",
+      "name_ko": "eng_1559_benefit_signal_users",
+      "description": "",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "first_order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "first_order_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "first_order_date",
+          "type": "DATE",
+          "nullable": true
+        },
+        {
+          "name": "current_days_since_first_order",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "has_add_order_screen",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "has_select_coupon",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "has_apply_coupon",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "has_submit_final",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "has_pickup_item_select",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "has_large_bag_150",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "has_large_bag_220",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "recommended_benefit",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "benefit_segment",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "loaded_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 15,
+      "dataset_meta": {
+        "id": "product",
+        "label_ko": "스팟 예약",
+        "source_system": "Supabase sync",
+        "sync_frequency": "daily 01:00 KST",
+        "color": "#22c55e",
+        "tier": 1
+      }
+    },
+    {
+      "id": "product.eng_1559_experiment_users",
+      "type": "table",
+      "dataset_id": "product",
+      "table_id": "eng_1559_experiment_users",
+      "name_ko": "eng_1559_experiment_users",
+      "description": "",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "first_order_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "selected_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "signal",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "variant",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "experiment_key",
+          "type": "STRING",
+          "nullable": true
+        }
+      ],
+      "column_count": 6,
+      "dataset_meta": {
+        "id": "product",
+        "label_ko": "스팟 예약",
+        "source_system": "Supabase sync",
+        "sync_frequency": "daily 01:00 KST",
+        "color": "#22c55e",
+        "tier": 1
+      }
+    },
+    {
+      "id": "product.eng_1559_reminder_experiment_users",
+      "type": "table",
+      "dataset_id": "product",
+      "table_id": "eng_1559_reminder_experiment_users",
+      "name_ko": "eng_1559_reminder_experiment_users",
+      "description": "",
+      "columns": [
+        {
+          "name": "user_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "first_order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "first_order_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "first_order_date",
+          "type": "DATE",
+          "nullable": true
+        },
+        {
+          "name": "selected_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "selected_date",
+          "type": "DATE",
+          "nullable": true
+        },
+        {
+          "name": "experiment_key",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "variant",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "scheduled_day",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "scheduled_send_date",
+          "type": "DATE",
+          "nullable": true
+        },
+        {
+          "name": "current_days_since_first_order",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "current_status",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "loaded_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 13,
+      "dataset_meta": {
+        "id": "product",
+        "label_ko": "스팟 예약",
+        "source_system": "Supabase sync",
+        "sync_frequency": "daily 01:00 KST",
+        "color": "#22c55e",
+        "tier": 1
+      }
+    },
+    {
+      "id": "product.experiment_user_assignments",
+      "type": "table",
+      "dataset_id": "product",
+      "table_id": "experiment_user_assignments",
+      "name_ko": "experiment_user_assignments",
+      "description": "",
+      "columns": [
+        {
+          "name": "experiment_key",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "user_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "variant",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "assigned_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "eligible_date",
+          "type": "DATE",
+          "nullable": true
+        },
+        {
+          "name": "scheduled_day",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "scheduled_send_date",
+          "type": "DATE",
+          "nullable": true
+        },
+        {
+          "name": "channel",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "tag_key",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "tag_value",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "assignment_status",
+          "type": "STRING",
+          "nullable": true
+        },
+        {
+          "name": "first_order_id",
+          "type": "INT64",
+          "nullable": true
+        },
+        {
+          "name": "first_order_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        },
+        {
+          "name": "loaded_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ],
+      "column_count": 14,
+      "dataset_meta": {
+        "id": "product",
+        "label_ko": "스팟 예약",
+        "source_system": "Supabase sync",
+        "sync_frequency": "daily 01:00 KST",
+        "color": "#22c55e",
+        "tier": 1
+      }
+    },
+    {
       "id": "product.ext_danggeon_pickup",
       "type": "table",
       "dataset_id": "product",
       "table_id": "ext_danggeon_pickup",
-      "name_ko": "ext_danggeon_pickup",
+      "name_ko": "당근 픽업 연동",
       "description": "당근마켓 픽업 서비스 연동 데이터",
       "columns": [
         {
@@ -3685,7 +5155,7 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "spot_events",
-      "name_ko": "spot_events",
+      "name_ko": "스팟 이벤트 (product)",
       "description": "스팟 서비스 관련 이벤트 로그 (product 버전)",
       "columns": [
         {
@@ -3729,7 +5199,7 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "spot_user_matching",
-      "name_ko": "spot_user_matching",
+      "name_ko": "스팟-메인앱 연결",
       "description": "방문수거 고객을 메인앱 사용자와 연결",
       "columns": [
         {
@@ -3808,7 +5278,7 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "spot_user_matching_backup",
-      "name_ko": "spot_user_matching_backup",
+      "name_ko": "스팟 매칭 백업",
       "description": "스팟 사용자-수거 매칭 이력 백업본",
       "columns": [
         {
@@ -3887,7 +5357,7 @@
       "type": "table",
       "dataset_id": "product",
       "table_id": "spot_waste_items",
-      "name_ko": "spot_waste_items",
+      "name_ko": "스팟 폐기물 품목",
       "description": "스팟 서비스에서 수거한 폐기물 품목 목록",
       "columns": [
         {
@@ -3956,7 +5426,7 @@
       "type": "table",
       "dataset_id": "spot",
       "table_id": "bookings",
-      "name_ko": "bookings",
+      "name_ko": "스팟 배차",
       "description": "방문수거 배차 상세 정보",
       "columns": [
         {
@@ -4117,7 +5587,8 @@
         {
           "name": "id",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "ladder_hours",
@@ -4200,7 +5671,7 @@
       "type": "table",
       "dataset_id": "spot",
       "table_id": "drivers",
-      "name_ko": "drivers",
+      "name_ko": "기사",
       "description": "방문수거 기사 정보",
       "columns": [
         {
@@ -4236,7 +5707,8 @@
         {
           "name": "id",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         },
         {
           "name": "initial_load_cube",
@@ -4304,7 +5776,7 @@
       "type": "table",
       "dataset_id": "spot",
       "table_id": "leads",
-      "name_ko": "leads",
+      "name_ko": "견적 요청",
       "description": "미확정 방문수거 견적 요청",
       "columns": [
         {
@@ -4380,7 +5852,8 @@
         {
           "name": "id",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         }
       ],
       "column_count": 15,
@@ -4398,7 +5871,7 @@
       "type": "table",
       "dataset_id": "spot",
       "table_id": "spot_areas",
-      "name_ko": "spot_areas",
+      "name_ko": "스팟 운영 구역",
       "description": "스팟 서비스 운영 가능 구역 정의",
       "columns": [
         {
@@ -4452,7 +5925,7 @@
       "type": "table",
       "dataset_id": "spot",
       "table_id": "spot_events",
-      "name_ko": "spot_events",
+      "name_ko": "스팟 이벤트",
       "description": "스팟 수거 신청·처리 이벤트 로그",
       "columns": [
         {
@@ -4491,7 +5964,7 @@
       "type": "table",
       "dataset_id": "spot",
       "table_id": "spot_items",
-      "name_ko": "spot_items",
+      "name_ko": "수거 품목",
       "description": "방문수거 가능 품목 및 단가",
       "columns": [
         {
@@ -4532,7 +6005,8 @@
         {
           "name": "id",
           "type": "STRING",
-          "nullable": true
+          "nullable": true,
+          "pk": true
         }
       ],
       "column_count": 8,
@@ -4546,69 +6020,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_identity_mappings_data_K9IVgqTRW6",
+      "id": "mixpanel.mp_identity_mappings_data_uj92wHs6ch",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_K9IVgqTRW6",
-      "name_ko": "mp_identity_mappings_data_K9IVgqTRW6",
-      "description": "",
-      "columns": [
-        {
-          "name": "resolved_distinct_id",
-          "type": "STRING",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_identity_mappings_data_oOdOGGpB89",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_oOdOGGpB89",
-      "name_ko": "mp_identity_mappings_data_oOdOGGpB89",
-      "description": "",
-      "columns": [
-        {
-          "name": "resolved_distinct_id",
-          "type": "STRING",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_identity_mappings_data_seD4JfiT0c",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_identity_mappings_data_seD4JfiT0c",
-      "name_ko": "mp_identity_mappings_data_seD4JfiT0c",
+      "table_id": "mp_identity_mappings_data_uj92wHs6ch",
+      "name_ko": "mp_identity_mappings_data_uj92wHs6ch",
       "description": "",
       "columns": [
         {
@@ -4666,7 +6082,7 @@
       "type": "table",
       "dataset_id": "mixpanel",
       "table_id": "mp_master_event",
-      "name_ko": "mp_master_event",
+      "name_ko": "Mixpanel 이벤트",
       "description": "앱 내 모든 사용자 행동 이벤트 (파티션: _PARTITIONDATE)",
       "columns": [
         {
@@ -4725,7 +6141,7 @@
       "type": "table",
       "dataset_id": "mixpanel",
       "table_id": "mp_nessie_export_log",
-      "name_ko": "mp_nessie_export_log",
+      "name_ko": "Mixpanel 내보내기 로그",
       "description": "Mixpanel → BQ 데이터 내보내기 실행 이력",
       "columns": [
         {
@@ -4770,98 +6186,11 @@
       }
     },
     {
-      "id": "mixpanel.mp_people_data_R0xcAlSp2D",
+      "id": "mixpanel.mp_people_data_n6AbBC669B",
       "type": "table",
       "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_R0xcAlSp2D",
-      "name_ko": "mp_people_data_R0xcAlSp2D",
-      "description": "",
-      "columns": [
-        {
-          "name": "properties",
-          "type": "JSON",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_people_data_gVQT30HrRA",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_gVQT30HrRA",
-      "name_ko": "mp_people_data_gVQT30HrRA",
-      "description": "",
-      "columns": [
-        {
-          "name": "properties",
-          "type": "JSON",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_people_data_mmPKSKjzCw",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_mmPKSKjzCw",
-      "name_ko": "mp_people_data_mmPKSKjzCw",
-      "description": "",
-      "columns": [
-        {
-          "name": "properties",
-          "type": "JSON",
-          "nullable": true
-        },
-        {
-          "name": "distinct_id",
-          "type": "STRING",
-          "nullable": true
-        }
-      ],
-      "column_count": 2,
-      "dataset_meta": {
-        "id": "mixpanel",
-        "label_ko": "Mixpanel 이벤트",
-        "source_system": "Mixpanel native connector",
-        "sync_frequency": "real-time",
-        "color": "#a855f7",
-        "tier": 1
-      }
-    },
-    {
-      "id": "mixpanel.mp_people_data_tAOYUB8ZTP",
-      "type": "table",
-      "dataset_id": "mixpanel",
-      "table_id": "mp_people_data_tAOYUB8ZTP",
-      "name_ko": "mp_people_data_tAOYUB8ZTP",
+      "table_id": "mp_people_data_n6AbBC669B",
+      "name_ko": "mp_people_data_n6AbBC669B",
       "description": "",
       "columns": [
         {
@@ -4890,7 +6219,7 @@
       "type": "table",
       "dataset_id": "mixpanel",
       "table_id": "mp_people_data_view",
-      "name_ko": "mp_people_data_view",
+      "name_ko": "Mixpanel 사용자 프로필",
       "description": "Mixpanel 사용자 속성 데이터",
       "columns": [
         {
@@ -4919,7 +6248,7 @@
       "type": "table",
       "dataset_id": "airbridge_dataset",
       "table_id": "app_events",
-      "name_ko": "app_events",
+      "name_ko": "Airbridge 앱 이벤트",
       "description": "앱 내 사용자 행동 이벤트 (Airbridge MMP 수집)",
       "columns": [
         {
@@ -5928,7 +7257,7 @@
       "type": "table",
       "dataset_id": "airbridge_dataset",
       "table_id": "tracking_link_events",
-      "name_ko": "tracking_link_events",
+      "name_ko": "Airbridge 트래킹 링크",
       "description": "딥링크·공유 링크 클릭 및 전환 이벤트",
       "columns": [
         {
@@ -6267,7 +7596,7 @@
       "type": "table",
       "dataset_id": "airbridge_dataset",
       "table_id": "web_events",
-      "name_ko": "web_events",
+      "name_ko": "Airbridge 웹 이벤트",
       "description": "웹사이트 방문·전환 이벤트 (Airbridge 수집)",
       "columns": [
         {
@@ -6936,7 +8265,7 @@
       "type": "table",
       "dataset_id": "cx_data",
       "table_id": "channel_talk",
-      "name_ko": "channel_talk",
+      "name_ko": "채널톡 대화",
       "description": "채널톡 고객 상담 대화 목록",
       "columns": [
         {
@@ -7165,7 +8494,7 @@
       "type": "table",
       "dataset_id": "cx_data",
       "table_id": "channel_talk_managers",
-      "name_ko": "channel_talk_managers",
+      "name_ko": "채널톡 상담사",
       "description": "채널톡 상담 담당 내부 운영자 목록",
       "columns": [
         {
@@ -7254,7 +8583,7 @@
       "type": "table",
       "dataset_id": "cx_data",
       "table_id": "channel_talk_messages",
-      "name_ko": "channel_talk_messages",
+      "name_ko": "채널톡 메시지",
       "description": "채널톡 상담 개별 메시지 내용",
       "columns": [
         {
@@ -7313,7 +8642,7 @@
       "type": "table",
       "dataset_id": "cx_data",
       "table_id": "channel_talk_userchat",
-      "name_ko": "channel_talk_userchat",
+      "name_ko": "채널톡 채팅방",
       "description": "채널톡 고객-상담사 채팅방 단위 메타",
       "columns": [
         {
@@ -7507,7 +8836,7 @@
       "type": "table",
       "dataset_id": "cx_data",
       "table_id": "channel_talk_users",
-      "name_ko": "channel_talk_users",
+      "name_ko": "채널톡 사용자",
       "description": "채널톡에 등록된 고객 정보",
       "columns": [
         {
@@ -7646,7 +8975,7 @@
       "type": "table",
       "dataset_id": "cx_data",
       "table_id": "channel_talk_workflow",
-      "name_ko": "channel_talk_workflow",
+      "name_ko": "채널톡 워크플로우",
       "description": "채널톡 자동 응대 워크플로우 실행 이력",
       "columns": [
         {
@@ -7760,7 +9089,7 @@
       "type": "table",
       "dataset_id": "bag_delivery",
       "table_id": "bag_stock_input",
-      "name_ko": "bag_stock_input",
+      "name_ko": "봉투 입고 이력",
       "description": "150L 봉투 창고 입고 수량 및 날짜",
       "columns": [
         {
@@ -7799,7 +9128,7 @@
       "type": "table",
       "dataset_id": "bag_delivery",
       "table_id": "branch_rider_mapping",
-      "name_ko": "branch_rider_mapping",
+      "name_ko": "지점-기사 배정",
       "description": "봉투 배송 지점과 담당 기사 간 매핑",
       "columns": [
         {
@@ -7833,7 +9162,7 @@
       "type": "table",
       "dataset_id": "bag_delivery",
       "table_id": "ext_walla_requests",
-      "name_ko": "ext_walla_requests",
+      "name_ko": "왈라 배송 요청",
       "description": "외부 배송사(왈라) 봉투 배송 요청 이력",
       "columns": [
         {
@@ -7907,7 +9236,7 @@
       "type": "table",
       "dataset_id": "bag_delivery",
       "table_id": "walla_matched_users",
-      "name_ko": "walla_matched_users",
+      "name_ko": "왈라 매칭 사용자",
       "description": "왈라 배송 서비스와 매칭된 사용자 목록",
       "columns": [
         {
@@ -7996,7 +9325,7 @@
       "type": "table",
       "dataset_id": "ads_data",
       "table_id": "daily_cost",
-      "name_ko": "daily_cost",
+      "name_ko": "광고 일별 비용",
       "description": "채널별 광고 일별 집행 금액",
       "columns": [
         {
@@ -8060,7 +9389,7 @@
       "type": "table",
       "dataset_id": "ads_data",
       "table_id": "daily_cost_creative",
-      "name_ko": "daily_cost_creative",
+      "name_ko": "광고 소재별 비용",
       "description": "광고 소재(이미지·영상)별 일별 집행 금액",
       "columns": [
         {
@@ -8139,7 +9468,7 @@
       "type": "table",
       "dataset_id": "ads_data",
       "table_id": "user_acquisition_channel",
-      "name_ko": "user_acquisition_channel",
+      "name_ko": "신규 유저 획득 채널",
       "description": "신규 가입 사용자의 유입 광고 채널",
       "columns": [
         {
@@ -8431,6 +9760,222 @@
     },
     {
       "source": "secure_dataset.user",
+      "target": "secure_dataset.order_v2",
+      "type": "internal",
+      "description": "id → user_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "user_id"
+    },
+    {
+      "source": "secure_dataset.company",
+      "target": "secure_dataset.order_v2",
+      "type": "internal",
+      "description": "id → company_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "company_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.user_coupon",
+      "type": "internal",
+      "description": "user_coupon_id → id",
+      "rel": "N:1",
+      "source_col": "user_coupon_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.payment_policy",
+      "type": "internal",
+      "description": "payment_policy_id → id",
+      "rel": "N:1",
+      "source_col": "payment_policy_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.order_customer_snapshot",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:1",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.order_address_snapshot",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:1",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.order_access_instruction",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:1",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.order_line",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.order_status_event",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.order_invoice",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.order_image_v2",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_v2",
+      "target": "secure_dataset.fulfillment",
+      "type": "internal",
+      "description": "id → order_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_id"
+    },
+    {
+      "source": "secure_dataset.order_line",
+      "target": "secure_dataset.product",
+      "type": "internal",
+      "description": "product_id → id",
+      "rel": "N:1",
+      "source_col": "product_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_line",
+      "target": "secure_dataset.order_line_change_event",
+      "type": "internal",
+      "description": "id → order_line_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "order_line_id"
+    },
+    {
+      "source": "secure_dataset.fulfillment",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.fulfillment",
+      "target": "secure_dataset.fulfillment_item",
+      "type": "internal",
+      "description": "id → fulfillment_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "fulfillment_id"
+    },
+    {
+      "source": "secure_dataset.fulfillment",
+      "target": "secure_dataset.fulfillment_status_event",
+      "type": "internal",
+      "description": "id → fulfillment_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "fulfillment_id"
+    },
+    {
+      "source": "secure_dataset.fulfillment",
+      "target": "secure_dataset.fulfillment_assignment",
+      "type": "internal",
+      "description": "id → fulfillment_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "fulfillment_id"
+    },
+    {
+      "source": "secure_dataset.fulfillment",
+      "target": "secure_dataset.fulfillment_message",
+      "type": "internal",
+      "description": "id → fulfillment_id",
+      "rel": "1:N",
+      "source_col": "id",
+      "target_col": "fulfillment_id"
+    },
+    {
+      "source": "secure_dataset.fulfillment_item",
+      "target": "secure_dataset.order_line",
+      "type": "internal",
+      "description": "order_line_id → id",
+      "rel": "N:1",
+      "source_col": "order_line_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.fulfillment_assignment",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.fulfillment_message",
+      "target": "secure_dataset.rider",
+      "type": "internal",
+      "description": "rider_id → id",
+      "rel": "N:1",
+      "source_col": "rider_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_image_v2",
+      "target": "secure_dataset.fulfillment",
+      "type": "internal",
+      "description": "fulfillment_id → id",
+      "rel": "N:1",
+      "source_col": "fulfillment_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_invoice",
+      "target": "secure_dataset.invoice",
+      "type": "internal",
+      "description": "invoice_id → id",
+      "rel": "N:1",
+      "source_col": "invoice_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.user",
       "target": "secure_dataset.user_address",
       "type": "internal",
       "description": "id → user_id",
@@ -8521,7 +10066,7 @@
     },
     {
       "source": "secure_dataset.order",
-      "target": "secure_dataset.coupon",
+      "target": "secure_dataset.user_coupon",
       "type": "internal",
       "description": "user_coupon_id → id",
       "rel": "N:1",
@@ -8700,6 +10245,15 @@
       "target_col": "id"
     },
     {
+      "source": "secure_dataset.fulfillment",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
       "source": "secure_dataset.optimize_route_meta",
       "target": "secure_dataset.rider",
       "type": "internal",
@@ -8727,12 +10281,66 @@
       "target_col": "id"
     },
     {
-      "source": "secure_dataset.order",
-      "target": "secure_dataset.user_coupon",
+      "source": "secure_dataset.order_access_instruction",
+      "target": "secure_dataset.order",
       "type": "internal",
-      "description": "user_coupon_id → user_coupon.id",
+      "description": "order_id → order.id",
       "rel": "N:1",
-      "source_col": "user_coupon_id",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_address_snapshot",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_address_snapshot",
+      "target": "secure_dataset.address",
+      "type": "internal",
+      "description": "address_id → address.id",
+      "rel": "N:1",
+      "source_col": "address_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_customer_snapshot",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_image_v2",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_invoice",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_line",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
       "target_col": "id"
     },
     {
@@ -8751,6 +10359,15 @@
       "description": "user_payment_method_id → user_payment_method.id",
       "rel": "N:1",
       "source_col": "user_payment_method_id",
+      "target_col": "id"
+    },
+    {
+      "source": "secure_dataset.order_status_event",
+      "target": "secure_dataset.order",
+      "type": "internal",
+      "description": "order_id → order.id",
+      "rel": "N:1",
+      "source_col": "order_id",
       "target_col": "id"
     },
     {
@@ -8970,6 +10587,42 @@
       "target_col": "id"
     },
     {
+      "source": "product.eng_1559_benefit_signal_users",
+      "target": "secure_dataset.user",
+      "type": "cross-dataset",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "product.eng_1559_experiment_users",
+      "target": "secure_dataset.user",
+      "type": "cross-dataset",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "product.eng_1559_reminder_experiment_users",
+      "target": "secure_dataset.user",
+      "type": "cross-dataset",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
+      "source": "product.experiment_user_assignments",
+      "target": "secure_dataset.user",
+      "type": "cross-dataset",
+      "description": "user_id → user.id",
+      "rel": "N:1",
+      "source_col": "user_id",
+      "target_col": "id"
+    },
+    {
       "source": "mixpanel.mp_master_event",
       "target": "secure_dataset.device",
       "type": "cross-dataset",
@@ -9072,7 +10725,7 @@
       "tier": 2
     }
   },
-  "generated_at": "2026-03-30 14:51:21"
+  "generated_at": "2026-04-01 09:49:51"
 };
 
         // --- 초기 설정 ---
@@ -9889,7 +11542,7 @@
         d3.select('#zoom-out').on('click', () => svg.transition().call(zoom.scaleBy, 0.8));
 
         // --- 푸터 정보 업데이트 ---
-        document.getElementById('footer-stats').textContent =
+        document.getElementById('footer-stats').textContent = 
             `테이블 ${graphData.tables.length}개 · 관계 ${graphData.edges.length}개 · 외부 시스템 ${graphData.external_nodes.length}개`;
 
         // BQ 스캔 시각 표시
@@ -9905,7 +11558,10 @@
                 if (btn) {
                     btn.textContent = '복사됨';
                     btn.classList.add('copied');
-                    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 1500);
+                    setTimeout(() => {
+                        btn.textContent = '복사';
+                        btn.classList.remove('copied');
+                    }, 1500);
                 }
             });
         }

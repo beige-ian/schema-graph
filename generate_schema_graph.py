@@ -55,6 +55,8 @@ except ImportError:
 # --- 상수 정의 ---
 PROJECT_ID = "covering-app-ccd23"
 D3_CDN_URL = "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
+BQ_QUERY_TIMEOUT_SECONDS = int(os.getenv("BQ_QUERY_TIMEOUT_SECONDS", "60"))
+D3_DOWNLOAD_TIMEOUT_SECONDS = int(os.getenv("D3_DOWNLOAD_TIMEOUT_SECONDS", "20"))
 TARGET_DATASETS = [
     'secure_dataset', 'product', 'spot', 'mixpanel', 
     'airbridge_dataset', 'cx_data', 'bag_delivery', 'ads_data'
@@ -78,7 +80,7 @@ def fetch_bq_schemas() -> dict:
             ORDER BY table_name, ordinal_position
         """
         try:
-            rows = list(client.query(query).result())
+            rows = list(client.query(query).result(timeout=BQ_QUERY_TIMEOUT_SECONDS))
             schemas[dataset_id] = {}
             for row in rows:
                 table_id = row.table_name
@@ -112,10 +114,16 @@ def build_graph_data(bq_schemas: dict) -> dict:
             full_table_id = f"{dataset_id}.{table_id}"
             override = schema_config.TABLE_OVERRIDES.get(full_table_id, {})
             override_cols = override.get("columns", {})
+            table_pk = set(override.get("pk", []))
+            table_enums = override.get("enums", {})
             
             columns = []
             for col in bq_columns:
-                col_override = override_cols.get(col['name'], {})
+                col_override = dict(override_cols.get(col['name'], {}))
+                if col['name'] in table_pk and 'pk' not in col_override:
+                    col_override['pk'] = True
+                if col['name'] in table_enums and 'enum' not in col_override:
+                    col_override['enum'] = table_enums[col['name']]
                 columns.append({**col, **col_override})
 
             node_data = {
@@ -123,7 +131,7 @@ def build_graph_data(bq_schemas: dict) -> dict:
                 "type": "table",
                 "dataset_id": dataset_id,
                 "table_id": table_id,
-                "name_ko": override.get("name_ko", table_id),
+                "name_ko": override.get("label_ko") or override.get("name_ko", table_id),
                 "description": override.get("description", ""),
                 "columns": columns,
                 "column_count": len(columns),
@@ -269,7 +277,7 @@ def generate_html(graph_data: dict) -> str:
     try:
         print(f"D3.js 라이브러리 다운로드 중... ({D3_CDN_URL})")
         req = urllib.request.Request(D3_CDN_URL, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req) as response:
+        with urllib.request.urlopen(req, timeout=D3_DOWNLOAD_TIMEOUT_SECONDS) as response:
             d3_script_content = response.read().decode('utf-8')
         print("D3.js 라이브러리 다운로드 완료.")
     except Exception as e:
@@ -639,11 +647,53 @@ def generate_html(graph_data: dict) -> str:
         .l-line { flex-shrink: 0; }
         .l-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
+        #login-overlay {
+            position: fixed; inset: 0; background: var(--bg-color);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+        }
+        #login-overlay.hidden { display: none; }
+        .login-box {
+            background: var(--card-color); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 40px 36px 32px; width: 320px; text-align: center;
+        }
+        .login-box h2 { font-size: 20px; font-weight: 600; margin: 0 0 24px; color: var(--text-color); }
+        .login-box input {
+            width: 100%; box-sizing: border-box; padding: 10px 12px; margin-bottom: 12px;
+            border: 1px solid var(--border-color); border-radius: 6px;
+            background: var(--bg-color); color: var(--text-color); font-size: 14px; outline: none;
+        }
+        .login-box input:focus { border-color: var(--accent-color); }
+        .login-box button {
+            width: 100%; padding: 10px; border: none; border-radius: 6px;
+            background: var(--accent-color); color: #fff; font-size: 14px; cursor: pointer; margin-top: 4px;
+        }
+        .login-box button:hover { opacity: 0.9; }
+        .login-error { color: #ef4444; font-size: 13px; margin-top: 8px; display: none; }
+        #scan-time { font-size: 11px; color: var(--secondary-text); margin-left: 12px; vertical-align: middle; }
+        .copy-btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 8px; font-size: 11px; cursor: pointer;
+            background: var(--card-color); border: 1px solid var(--border-color);
+            border-radius: 4px; color: var(--secondary-text);
+            vertical-align: middle; margin-left: 6px; transition: all 0.15s;
+        }
+        .copy-btn:hover { border-color: var(--accent-color); color: var(--text-color); }
+        .copy-btn.copied { border-color: #22c55e; color: #22c55e; }
+
     </style>
 </head>
 <body>
+    <div id="login-overlay">
+        <div class="login-box">
+            <h2>Schema Graph</h2>
+            <input type="text" id="login-id" placeholder="ID" autocomplete="username">
+            <input type="password" id="login-pw" placeholder="Password" autocomplete="current-password">
+            <button id="login-btn">로그인</button>
+            <div class="login-error" id="login-error"></div>
+        </div>
+    </div>
     <header>
-        <h1>BigQuery 스키마 관계도</h1>
+        <h1>BigQuery 스키마 관계도<span id="scan-time"></span></h1>
         <div class="controls">
             <div class="filter-group" id="tier-filters">
                 <span class="group-label">Tier:</span>
@@ -694,6 +744,49 @@ def generate_html(graph_data: dict) -> str:
     </footer>
 
     <script>
+        // --- 인증 ---
+        (function() {
+            function unlock() {
+                document.getElementById('login-overlay').classList.add('hidden');
+            }
+            async function checkSession() {
+                const token = sessionStorage.getItem('schema_auth');
+                if (!token) { document.getElementById('login-id').focus(); return; }
+                try {
+                    const r = await fetch('/api/verify', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({token})});
+                    const d = await r.json();
+                    if (r.ok && d.ok) { unlock(); return; }
+                } catch(e) {}
+                sessionStorage.removeItem('schema_auth');
+                document.getElementById('login-id').focus();
+            }
+            checkSession();
+            async function tryLogin() {
+                const id = document.getElementById('login-id').value;
+                const pw = document.getElementById('login-pw').value;
+                const btn = document.getElementById('login-btn');
+                btn.disabled = true;
+                document.getElementById('login-error').style.display = 'none';
+                try {
+                    const r = await fetch('/api/login', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id, password:pw})});
+                    const d = await r.json();
+                    if (r.ok && d.ok) {
+                        sessionStorage.setItem('schema_auth', d.token);
+                        unlock();
+                    } else {
+                        document.getElementById('login-error').textContent = d.error || '아이디 또는 비밀번호가 틀립니다.';
+                        document.getElementById('login-error').style.display = 'block';
+                    }
+                } catch(e) {
+                    document.getElementById('login-error').textContent = '서버 연결 오류가 발생했습니다.';
+                    document.getElementById('login-error').style.display = 'block';
+                } finally {
+                    btn.disabled = false;
+                }
+            }
+            document.getElementById('login-btn').addEventListener('click', tryLogin);
+            document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+        })();
 
         // --- 인라인 D3.js v7 라이브러리 ---
         __D3_SCRIPT__
@@ -1265,7 +1358,10 @@ def generate_html(graph_data: dict) -> str:
                 content = `
                     <div class="panel-header">
                         <h2>${d.name_ko} ${badge}</h2>
-                        <p class="sub-name">${d.id}</p>
+                        <p class="sub-name">
+                            ${d.id}
+                            <button class="copy-btn" id="copy-btn-${d.id.replace(/\./g, '-')}" onclick="copyTableId('${d.id}')">복사</button>
+                        </p>
                     </div>
                     <div class="panel-section">
                         <h3>설명</h3>
@@ -1514,6 +1610,27 @@ def generate_html(graph_data: dict) -> str:
         // --- 푸터 정보 업데이트 ---
         document.getElementById('footer-stats').textContent = 
             `테이블 ${graphData.tables.length}개 · 관계 ${graphData.edges.length}개 · 외부 시스템 ${graphData.external_nodes.length}개`;
+
+        // BQ 스캔 시각 표시
+        if (graphData.generated_at) {
+            document.getElementById('scan-time').textContent = `· ${graphData.generated_at} 기준`;
+        }
+
+        // 테이블 ID 클립보드 복사
+        function copyTableId(tableId) {
+            navigator.clipboard.writeText(tableId).then(() => {
+                const btnId = 'copy-btn-' + tableId.replace(/\./g, '-');
+                const btn = document.getElementById(btnId);
+                if (btn) {
+                    btn.textContent = '복사됨';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = '복사';
+                        btn.classList.remove('copied');
+                    }, 1500);
+                }
+            });
+        }
     </script>
 </body>
 </html>
