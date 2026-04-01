@@ -1,0 +1,12 @@
+[Unit]
+Description=Schema Graph HTTP Server
+After=network.target
+
+[Service]
+WorkingDirectory=/home/__USERNAME__/schema-graph
+ExecStart=/home/__USERNAME__/schema-graph/serve_schema_graph.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
