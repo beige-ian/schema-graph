@@ -21,18 +21,25 @@ jobs:
           import base64, json, os
           from nacl.public import PublicKey, SealedBox
           from urllib.request import Request, urlopen
+          from urllib.error import HTTPError
           secret = os.environ['EXISTING_VERCEL_KEY']
           if not secret.strip():
               raise SystemExit('Existing Vercel secret is empty')
           try:
+              identity_request = Request('https://api.vercel.com/v2/user', headers={'Authorization': 'Bearer ' + secret})
+              with urlopen(identity_request, timeout=30) as response:
+                  identity = json.load(response)
+              print('Existing key identity read succeeded')
               request = Request('https://api.vercel.com/v9/projects/prj_xwj53v8Y5SPZA8GDvfMv65e0Pbu0?teamId=team_aQs3jMM83P3Id90T5Rq1OXVS',
                                 headers={'Authorization': 'Bearer ' + secret})
               with urlopen(request, timeout=30) as response:
                   project = json.load(response)
               if project.get('id') != 'prj_xwj53v8Y5SPZA8GDvfMv65e0Pbu0':
                   raise ValueError()
-          except Exception:
-              raise SystemExit('Existing key cannot access the intended dog-run project') from None
+          except HTTPError as error:
+              raise SystemExit('Existing key validation HTTP status: ' + str(error.code)) from None
+          except Exception as error:
+              raise SystemExit('Existing key validation failed: ' + type(error).__name__) from None
           public_key = PublicKey(base64.b64decode(os.environ['DESTINATION_PUBLIC_KEY'], validate=True))
           encrypted = SealedBox(public_key).encrypt(secret.encode())
           receipt = {'repository': 'beige-ian/dog-run-scout-deploy',
