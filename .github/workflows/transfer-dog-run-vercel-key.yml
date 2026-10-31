@@ -1,0 +1,52 @@
+# One-time, user-authorized transfer; destination-bound ciphertext only.
+name: Transfer existing Vercel key to dog-run deployment
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  encrypt-for-destination:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Install encryption dependency before exposing the secret
+        run: python3 -m pip install --disable-pip-version-check PyNaCl==1.6.2
+      - name: Encrypt only for the destination GitHub repository
+        env:
+          EXISTING_VERCEL_KEY: ${{ secrets.VERCEL_TOKEN }}
+          DESTINATION_PUBLIC_KEY: FS1gJ7FG21/rbLSUB7KJQWAmXiXnrNeDBlnKJESBpDc=
+          DESTINATION_KEY_ID: '3380204578043523366'
+        run: |
+          python3 - <<'PY'
+          import base64, json, os
+          from nacl.public import PublicKey, SealedBox
+          from urllib.request import Request, urlopen
+          from urllib.error import HTTPError
+          secret = os.environ['EXISTING_VERCEL_KEY']
+          if not secret.strip():
+              raise SystemExit('Existing Vercel secret is empty')
+          try:
+              request = Request('https://api.vercel.com/v9/projects/prj_xwj53v8Y5SPZA8GDvfMv65e0Pbu0?teamId=team_aQs3jMM83P3Id90T5Rq1OXVS',
+                                headers={'Authorization': 'Bearer ' + secret})
+              with urlopen(request, timeout=30) as response:
+                  project = json.load(response)
+              if project.get('id') != 'prj_xwj53v8Y5SPZA8GDvfMv65e0Pbu0':
+                  raise ValueError()
+              print('VALIDATION_RESULT=' + json.dumps({'http_status': 200, 'project_matches': True}))
+          except HTTPError as error:
+              try:
+                  code = json.load(error).get('error', {}).get('code')
+              except Exception:
+                  code = None
+              allowed = {'forbidden', 'unauthorized', 'token_expired', 'invalid_token', 'not_authorized', 'not_found'}
+              print('VALIDATION_RESULT=' + json.dumps({'http_status': error.code, 'error_code': code if code in allowed else 'unclassified', 'project_matches': False}))
+              raise SystemExit(1) from None
+          except Exception as error:
+              raise SystemExit('Existing key validation failed: ' + type(error).__name__) from None
+          public_key = PublicKey(base64.b64decode(os.environ['DESTINATION_PUBLIC_KEY'], validate=True))
+          encrypted = SealedBox(public_key).encrypt(secret.encode())
+          receipt = {'repository': 'beige-ian/dog-run-scout-deploy',
+                     'name': 'VERCEL_TOKEN', 'key_id': os.environ['DESTINATION_KEY_ID'],
+                     'encrypted_value': base64.b64encode(encrypted).decode()}
+          print('ENCRYPTED_SECRET_RECEIPT=' + json.dumps(receipt, separators=(',', ':')))
+          PY
